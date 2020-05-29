@@ -9,8 +9,8 @@ a clear distinction between the two from the get-go.
 > Parallelism is about **doing** a lot of things at the same time.
 
 We call the concept of progressing multiple tasks at the same time `Multitasking`.
-There are several ways to multitask. One is by **progressing** tasks concurrently,
-but not at the same time. Another is to progress two tasks at the exact same time in parallel.
+There are two ways to multitask. One is by **progressing** tasks concurrently,
+but not at the same time. Another is to progress tasks at the exact same time in parallel.
 
 ![parallel vs concurrency](./images/definitions.jpg)
 

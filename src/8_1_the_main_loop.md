@@ -265,7 +265,7 @@ pub fn run(mut self, f: impl Fn()) {
 
 ## Shortcuts
 
-I'll mention some obvious shortcuts right here so you are aware of them. There are many "exceptions" that we don't cover in our example. We are focusing on the big picture just so we're on the same page. The `process.nextTick` function and the `setImmediate` function are two examples of this. I explained how we did skip the fact that the next timeout will define how long the `poll` phase will potentially block instead of continue the loop like we do here.
+I'll mention some obvious shortcuts right here so you are aware of them. There are many "exceptions" that we don't cover in our example. We are focusing on the big picture just so we're on the same page. The `process.nextTick` function and the `setImmediate` function are two examples of this.
 
 We don't cover the case where a server under heavy load might have too many callbacks to reasonably run in one `poll` which means that we could starve our I/O resources in the meantime waiting for them to finish, and probably several similar cases that a production
 runtime should care about.

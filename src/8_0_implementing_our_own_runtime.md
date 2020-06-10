@@ -109,7 +109,7 @@ It's just so we don't have to `match` or `map` on `task` all the way through our
 
 First is `NodeThread`, which represents a thread in our thread pool. As you
 see we have a `JoinHandle` (which we get when we call `thread::spawn`) and the
-sending part of a channel. This channel, sends messages of the type `Event`.
+sending part of a channel. This channel, sends messages of the type `Task`.
 
 ```rust, no_run
 #[derive(Debug)]

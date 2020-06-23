@@ -13,7 +13,7 @@ fn run_callbacks(&mut self) {
 }
 ```
 
-> Shortcut. Not all of Nodes callbacks are processed here. Some callbacks is called
+> Not all of Nodes callbacks are processed here. Some callbacks is called
 > directly in the `poll` phase we'll introduce below. It's not difficult to implement
 > but it adds unnecessary complexity to our example so we schedule all callbacks to be
 > run in this step of the process. As long as you know this is an oversimplification

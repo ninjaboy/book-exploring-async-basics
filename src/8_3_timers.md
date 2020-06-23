@@ -47,7 +47,7 @@ Now I take every key in this range and add it to `timers_to_remove`, and the rea
 for this is that I found no good way to both get a range and remove the key's in one
 operation without allocating a small buffer every time. You can iterate over the range
 but due to the ownership rules you can't remove them at the same time, and we want to
-remove the timers, we've run.
+remove the timers, that we're done with.
 
 The eventloop will run repeatedly so avoiding any allocations inside the loop is smart. There is no need to have this overhead.
 
@@ -61,7 +61,7 @@ while let Some(key) = timers_to_remove.pop() {
 The next step is to take every timer that has expired, remove the timer from our `self.timers` collection and get their `callback_id`.
 
 As I explained in the previous chapter, this is an unique Id for this callback. What's
-important here is that we don't run the callback **immediately**. Node actually registers callbacks to be run on the next `tick`. An exception is the timers since they either have timed out or is a timer with a timeout of `0`. In this case a timer will not wait for the next tick if it has timed out, or in the case if it has a timeout of `0` they will be invoked immediately as you'll see next.
+important here is that we don't run the callback **immediately**. Node actually registers callbacks to be run on the next `tick`. An exception is the timers since they either have timed out or is a timer with a timeout of `0`. In this case a timer will not wait for the next tick if it has timed out (or  if it has a timeout of `0`) but instead they will be invoked immediately as you'll see next.
 
 Anyway, for now we add the callback id's to `self.callbacks_to_run`.
 

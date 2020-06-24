@@ -239,7 +239,7 @@ hard to grasp. Everything will be explained.</p>
 <h2><a class="header" href="#nodethread" id="nodethread">NodeThread</a></h2>
 <p>First is <code>NodeThread</code>, which represents a thread in our thread pool. As you
 see we have a <code>JoinHandle</code> (which we get when we call <code>thread::spawn</code>) and the
-sending part of a channel. This channel, sends messages of the type <code>Event</code>.</p>
+sending part of a channel. This channel, sends messages of the type <code>Task</code>.</p>
 <pre><pre class="playpen"><code class="language-rust no_run">
 # #![allow(unused_variables)]
 #fn main() {

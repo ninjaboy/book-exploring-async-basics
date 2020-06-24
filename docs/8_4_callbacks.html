@@ -164,7 +164,7 @@ fn run_callbacks(&amp;mut self) {
 }
 #}</code></pre></pre>
 <blockquote>
-<p>Shortcut. Not all of Nodes callbacks are processed here. Some callbacks is called
+<p>Not all of Nodes callbacks are processed here. Some callbacks is called
 directly in the <code>poll</code> phase we'll introduce below. It's not difficult to implement
 but it adds unnecessary complexity to our example so we schedule all callbacks to be
 run in this step of the process. As long as you know this is an oversimplification

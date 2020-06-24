@@ -1624,7 +1624,7 @@ hard to grasp. Everything will be explained.</p>
 <h2><a class="header" href="#nodethread" id="nodethread">NodeThread</a></h2>
 <p>First is <code>NodeThread</code>, which represents a thread in our thread pool. As you
 see we have a <code>JoinHandle</code> (which we get when we call <code>thread::spawn</code>) and the
-sending part of a channel. This channel, sends messages of the type <code>Event</code>.</p>
+sending part of a channel. This channel, sends messages of the type <code>Task</code>.</p>
 <pre><pre class="playpen"><code class="language-rust no_run">
 # #![allow(unused_variables)]
 #fn main() {
@@ -1952,7 +1952,7 @@ pub fn run(mut self, f: impl Fn()) {
 }
 #}</code></pre></pre>
 <h2><a class="header" href="#shortcuts" id="shortcuts">Shortcuts</a></h2>
-<p>I'll mention some obvious shortcuts right here so you are aware of them. There are many &quot;exceptions&quot; that we don't cover in our example. We are focusing on the big picture just so we're on the same page. The <code>process.nextTick</code> function and the <code>setImmediate</code> function are two examples of this. I explained how we did skip the fact that the next timeout will define how long the <code>poll</code> phase will potentially block instead of continue the loop like we do here.</p>
+<p>I'll mention some obvious shortcuts right here so you are aware of them. There are many &quot;exceptions&quot; that we don't cover in our example. We are focusing on the big picture just so we're on the same page. The <code>process.nextTick</code> function and the <code>setImmediate</code> function are two examples of this.</p>
 <p>We don't cover the case where a server under heavy load might have too many callbacks to reasonably run in one <code>poll</code> which means that we could starve our I/O resources in the meantime waiting for them to finish, and probably several similar cases that a production
 runtime should care about.</p>
 <p>As you'll probably notice, implementing a simple version is more than enough work
@@ -2465,7 +2465,7 @@ which is from the start of the map, up until or equal to the instant NOW.</p>
 for this is that I found no good way to both get a range and remove the key's in one
 operation without allocating a small buffer every time. You can iterate over the range
 but due to the ownership rules you can't remove them at the same time, and we want to
-remove the timers, we've run.</p>
+remove the timers, that we're done with.</p>
 <p>The eventloop will run repeatedly so avoiding any allocations inside the loop is smart. There is no need to have this overhead.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
@@ -2477,7 +2477,7 @@ while let Some(key) = timers_to_remove.pop() {
 #}</code></pre></pre>
 <p>The next step is to take every timer that has expired, remove the timer from our <code>self.timers</code> collection and get their <code>callback_id</code>.</p>
 <p>As I explained in the previous chapter, this is an unique Id for this callback. What's
-important here is that we don't run the callback <strong>immediately</strong>. Node actually registers callbacks to be run on the next <code>tick</code>. An exception is the timers since they either have timed out or is a timer with a timeout of <code>0</code>. In this case a timer will not wait for the next tick if it has timed out, or in the case if it has a timeout of <code>0</code> they will be invoked immediately as you'll see next.</p>
+important here is that we don't run the callback <strong>immediately</strong>. Node actually registers callbacks to be run on the next <code>tick</code>. An exception is the timers since they either have timed out or is a timer with a timeout of <code>0</code>. In this case a timer will not wait for the next tick if it has timed out (or  if it has a timeout of <code>0</code>) but instead they will be invoked immediately as you'll see next.</p>
 <p>Anyway, for now we add the callback id's to <code>self.callbacks_to_run</code>.</p>
 <p>Before we continue, let's recap by looking what members of the <code>Runtime</code> struct
 we used here:</p>
@@ -2505,7 +2505,7 @@ fn run_callbacks(&amp;mut self) {
 }
 #}</code></pre></pre>
 <blockquote>
-<p>Shortcut. Not all of Nodes callbacks are processed here. Some callbacks is called
+<p>Not all of Nodes callbacks are processed here. Some callbacks is called
 directly in the <code>poll</code> phase we'll introduce below. It's not difficult to implement
 but it adds unnecessary complexity to our example so we schedule all callbacks to be
 run in this step of the process. As long as you know this is an oversimplification

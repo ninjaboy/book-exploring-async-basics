@@ -380,7 +380,7 @@ pub fn run(mut self, f: impl Fn()) {
 }
 #}</code></pre></pre>
 <h2><a class="header" href="#shortcuts" id="shortcuts">Shortcuts</a></h2>
-<p>I'll mention some obvious shortcuts right here so you are aware of them. There are many &quot;exceptions&quot; that we don't cover in our example. We are focusing on the big picture just so we're on the same page. The <code>process.nextTick</code> function and the <code>setImmediate</code> function are two examples of this. I explained how we did skip the fact that the next timeout will define how long the <code>poll</code> phase will potentially block instead of continue the loop like we do here.</p>
+<p>I'll mention some obvious shortcuts right here so you are aware of them. There are many &quot;exceptions&quot; that we don't cover in our example. We are focusing on the big picture just so we're on the same page. The <code>process.nextTick</code> function and the <code>setImmediate</code> function are two examples of this.</p>
 <p>We don't cover the case where a server under heavy load might have too many callbacks to reasonably run in one <code>poll</code> which means that we could starve our I/O resources in the meantime waiting for them to finish, and probably several similar cases that a production
 runtime should care about.</p>
 <p>As you'll probably notice, implementing a simple version is more than enough work

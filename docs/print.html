@@ -1741,7 +1741,7 @@ impl Runtime {
 #fn main() {
 let rt_ptr: *mut Runtime = &amp;mut self;
 unsafe { RUNTIME = rt_ptr };
-let mut ticks = 0; // just for us priting out
+let mut ticks = 0; // just for us printing out
 
 // First we run our &quot;main&quot; function
 f();
@@ -1983,18 +1983,18 @@ but we will take a shortcut and hard code it:</p>
 <pre><pre class="playpen"><code class="language-rust no_run">
 # #![allow(unused_variables)]
 #fn main() {
-let (event_sender, event_reciever) = channel::&lt;PollEvent&gt;();
+let (event_sender, event_receiver) = channel::&lt;PollEvent&gt;();
 let mut threads = Vec::with_capacity(4);
 
 for i in 0..4 {
-    let (evt_sender, evt_reciever) = channel::&lt;Task&gt;();
+    let (evt_sender, evt_receiver) = channel::&lt;Task&gt;();
     let event_sender = event_sender.clone();
 
     let handle = thread::Builder::new()
         .name(format!(&quot;pool{}&quot;, i))
         .spawn(move || {
 
-            while let Ok(task) = evt_reciever.recv() {
+            while let Ok(task) = evt_receiver.recv() {
                 print(format!(&quot;received a task of type: {}&quot;, task.kind));
 
                 if let ThreadPoolTaskKind::Close = task.kind {
@@ -2028,7 +2028,7 @@ in the struct <code>NodeThread</code> which will represent a thread in our threa
 <pre><pre class="playpen"><code class="language-rust no_run">
 # #![allow(unused_variables)]
 #fn main() {
-let (evt_sender, evt_reciever) = channel::&lt;Event&gt;();
+let (evt_sender, evt_receiver) = channel::&lt;Task&gt;();
 let event_sender = event_sender.clone();
 #}</code></pre></pre>
 <p>As you see here, we also clone the <code>Sender</code> part which we'll pass on to each thread
@@ -2059,7 +2059,7 @@ out information for us to see:</p>
 <pre><pre class="playpen"><code class="language-rust no_run">
 # #![allow(unused_variables)]
 #fn main() {
-while let Ok(task) = evt_reciever.recv() {
+while let Ok(task) = evt_receiver.recv() {
         print(format!(&quot;received a task of type: {}&quot;, task.kind));
 
         if let ThreadPoolTaskKind::Close = task.kind {
@@ -2074,7 +2074,7 @@ while let Ok(task) = evt_reciever.recv() {
     }
 })
 #}</code></pre></pre>
-<p>The first thing we do is to listen on our <code>Recieve</code> part of the channel (remember,
+<p>The first thing we do is to listen on our <code>Receive</code> part of the channel (remember,
 we gave the <code>Send</code> part to our <code>main</code> thread). This function will actually
 <code>park</code> our thread until we receive a message so it consumes no resources while
 waiting.</p>
@@ -2293,7 +2293,7 @@ far into it:</p>
     epoll_registrator: registrator,
     epoll_thread,
     epoll_timeout,
-    event_reciever,
+    event_receiver,
     identity_token: 0,
     pending_events: 0,
     thread_pool: threads,
@@ -2326,18 +2326,18 @@ logic from a-z:</p>
 impl Runtime {
     pub fn new() -&gt; Self {
         // ===== THE REGULAR THREADPOOL =====
-        let (event_sender, event_reciever) = channel::&lt;PollEvent&gt;();
+        let (event_sender, event_receiver) = channel::&lt;PollEvent&gt;();
         let mut threads = Vec::with_capacity(4);
 
         for i in 0..4 {
-            let (evt_sender, evt_reciever) = channel::&lt;Task&gt;();
+            let (evt_sender, evt_receiver) = channel::&lt;Task&gt;();
             let event_sender = event_sender.clone();
 
             let handle = thread::Builder::new()
                 .name(format!(&quot;pool{}&quot;, i))
                 .spawn(move || {
 
-                    while let Ok(task) = evt_reciever.recv() {
+                    while let Ok(task) = evt_receiver.recv() {
                         print(format!(&quot;received a task of type: {}&quot;, task.kind));
 
                         if let ThreadPoolTaskKind::Close = task.kind {
@@ -2410,7 +2410,7 @@ impl Runtime {
             epoll_registrator: registrator,
             epoll_thread,
             epoll_timeout,
-            event_reciever,
+            event_receiver,
             identity_token: 0,
             pending_events: 0,
             thread_pool: threads,
@@ -2696,7 +2696,7 @@ fn add_callback(&amp;mut self, ident: usize, cb: impl FnOnce(Js) + 'static) {
     self.callback_queue.insert(ident, boxed_cb);
 }
 #}</code></pre></pre>
-<p>If you haven't seen the signature <code>cb: impl impl FnOnce(Js) + 'static</code> before I'll
+<p>If you haven't seen the signature <code>cb: impl FnOnce(Js) + 'static</code> before I'll
 explain it briefly here.</p>
 <p>The <code>impl ...</code> means that we accept an arguments that implements the trait <code>FnOnce(Js)</code>
 with a <code>'static</code> lifetime. <a href="https://doc.rust-lang.org/std/ops/trait.FnOnce.html">FnOnce</a> is

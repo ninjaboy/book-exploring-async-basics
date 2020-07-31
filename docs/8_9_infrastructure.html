@@ -223,7 +223,7 @@ fn add_callback(&amp;mut self, ident: usize, cb: impl FnOnce(Js) + 'static) {
     self.callback_queue.insert(ident, boxed_cb);
 }
 #}</code></pre></pre>
-<p>If you haven't seen the signature <code>cb: impl impl FnOnce(Js) + 'static</code> before I'll
+<p>If you haven't seen the signature <code>cb: impl FnOnce(Js) + 'static</code> before I'll
 explain it briefly here.</p>
 <p>The <code>impl ...</code> means that we accept an arguments that implements the trait <code>FnOnce(Js)</code>
 with a <code>'static</code> lifetime. <a href="https://doc.rust-lang.org/std/ops/trait.FnOnce.html">FnOnce</a> is

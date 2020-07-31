@@ -21,7 +21,7 @@ impl Runtime {
 ```rust, no_run
 let rt_ptr: *mut Runtime = &mut self;
 unsafe { RUNTIME = rt_ptr };
-let mut ticks = 0; // just for us priting out
+let mut ticks = 0; // just for us printing out
 
 // First we run our "main" function
 f();
@@ -273,4 +273,3 @@ runtime should care about.
 As you'll probably notice, implementing a simple version is more than enough work
 for us to cover in this book, but hopefully you'll find yourself in pretty good
 shape to dig further once we're finished.
-

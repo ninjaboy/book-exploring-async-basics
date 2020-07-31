@@ -30,18 +30,18 @@ Node defaults to 4 threads which we will copy. This is configurable in `Node`
 but we will take a shortcut and hard code it:
 
 ```rust, no_run
-let (event_sender, event_reciever) = channel::<PollEvent>();
+let (event_sender, event_receiver) = channel::<PollEvent>();
 let mut threads = Vec::with_capacity(4);
 
 for i in 0..4 {
-    let (evt_sender, evt_reciever) = channel::<Task>();
+    let (evt_sender, evt_receiver) = channel::<Task>();
     let event_sender = event_sender.clone();
 
     let handle = thread::Builder::new()
         .name(format!("pool{}", i))
         .spawn(move || {
 
-            while let Ok(task) = evt_reciever.recv() {
+            while let Ok(task) = evt_receiver.recv() {
                 print(format!("received a task of type: {}", task.kind));
 
                 if let ThreadPoolTaskKind::Close = task.kind {
@@ -76,7 +76,7 @@ threads. Each thread keeps their `Receiver`, and we'll store the `Send` part
 in the struct `NodeThread` which will represent a thread in our threadpool.
 
 ```rust, no_run
-let (evt_sender, evt_reciever) = channel::<Event>();
+let (evt_sender, evt_receiver) = channel::<Task>();
 let event_sender = event_sender.clone();
 ```
 As you see here, we also clone the `Sender` part which we'll pass on to each thread
@@ -109,7 +109,7 @@ The body of our new threads are really simple, most of the lines are about print
 out information for us to see:
 
 ```rust, no_run
-while let Ok(task) = evt_reciever.recv() {
+while let Ok(task) = evt_receiver.recv() {
         print(format!("received a task of type: {}", task.kind));
 
         if let ThreadPoolTaskKind::Close = task.kind {
@@ -125,7 +125,7 @@ while let Ok(task) = evt_reciever.recv() {
 })
 ```
 
-The first thing we do is to listen on our `Recieve` part of the channel (remember,
+The first thing we do is to listen on our `Receive` part of the channel (remember,
 we gave the `Send` part to our `main` thread). This function will actually
 `park` our thread until we receive a message so it consumes no resources while
 waiting.
@@ -363,7 +363,7 @@ far into it:
     epoll_registrator: registrator,
     epoll_thread,
     epoll_timeout,
-    event_reciever,
+    event_receiver,
     identity_token: 0,
     pending_events: 0,
     thread_pool: threads,
@@ -397,18 +397,18 @@ logic from a-z:
 impl Runtime {
     pub fn new() -> Self {
         // ===== THE REGULAR THREADPOOL =====
-        let (event_sender, event_reciever) = channel::<PollEvent>();
+        let (event_sender, event_receiver) = channel::<PollEvent>();
         let mut threads = Vec::with_capacity(4);
 
         for i in 0..4 {
-            let (evt_sender, evt_reciever) = channel::<Task>();
+            let (evt_sender, evt_receiver) = channel::<Task>();
             let event_sender = event_sender.clone();
 
             let handle = thread::Builder::new()
                 .name(format!("pool{}", i))
                 .spawn(move || {
 
-                    while let Ok(task) = evt_reciever.recv() {
+                    while let Ok(task) = evt_receiver.recv() {
                         print(format!("received a task of type: {}", task.kind));
 
                         if let ThreadPoolTaskKind::Close = task.kind {
@@ -481,7 +481,7 @@ impl Runtime {
             epoll_registrator: registrator,
             epoll_thread,
             epoll_timeout,
-            event_reciever,
+            event_receiver,
             identity_token: 0,
             pending_events: 0,
             thread_pool: threads,

@@ -73,7 +73,7 @@ fn add_callback(&mut self, ident: usize, cb: impl FnOnce(Js) + 'static) {
     self.callback_queue.insert(ident, boxed_cb);
 }
 ```
-If you haven't seen the signature `cb: impl impl FnOnce(Js) + 'static` before I'll
+If you haven't seen the signature `cb: impl FnOnce(Js) + 'static` before I'll
 explain it briefly here.
 
 The `impl ...` means that we accept an arguments that implements the trait `FnOnce(Js)`

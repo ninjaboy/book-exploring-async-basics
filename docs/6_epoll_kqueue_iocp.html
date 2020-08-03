@@ -161,7 +161,7 @@ languages have bindings for it.</p>
 to understand how everything works, I decided to create an extremely
 simplified version of an event queue. I called it <code>minimio</code> since it's greatly inspired by <code>mio</code>.</p>
 <blockquote>
-<p>I have written a about how this works in detail called <a href="https://cfsamsonbooks.gitbook.io/epoll-kqueue-iocp-explained/">Epoll, Kqueue and IOCP explained</a>. 
+<p>I have written about how this works in detail in <a href="https://cfsamsonbooks.gitbook.io/epoll-kqueue-iocp-explained/">Epoll, Kqueue and IOCP explained</a>. 
 In that book we also create the event loop which we will use as the cross platform eventloop in this book. You can visit the code at its <a href="https://github.com/cfsamson/examples-minimio">Github repository if you're
 curious</a>.</p>
 </blockquote>
@@ -173,7 +173,7 @@ Linux, MacOS and Windows provide several ways of performing I/O, both blocking a
 non-blocking.</p>
 <p>So blocking operations are the least flexible to use for us as programmers since we yield control to the OS, which suspends our thread. The big advantage is that our thread gets woken up once the event we're waiting for is ready.</p>
 <p>Non-blocking methods are more flexible but need to have a way to tell us if a task is ready or not. This is most often done by returning some kind of data that says if it's <code>Ready</code> or <code>NotReady</code>. One drawback is that we need to check this status regularly to be able to tell if the state has changed.</p>
-<p>Event queuing via Epoll/kqueue/IOCP is a way to combine the flexibility of a non-blocking method without its aforementioned drawback.</p>
+<p>Event queuing via Epoll/kqueue/IOCP is a way to enjoy the flexibility of a non-blocking method without its aforementioned drawback.</p>
 <blockquote>
 <p>We will not cover methods like <code>poll</code> and <code>select</code>, but I have an <a href="http://web.archive.org/web/20190112082733/https://people.eecs.berkeley.edu/%7Esangjin/2012/12/21/epoll-vs-kqueue.html">article for you
 here</a>

@@ -152,7 +152,7 @@
                         <h1><a class="header" href="#async-history" id="async-history">Async history</a></h1>
 <p>In the beginning, computers had one CPU and it executed a set of instructions written
 by a programmer one by one. No scheduling, no threads, no multitasking. This was
-how computers worked for a long time. We're talking back when the days where a program
+how computers worked for a long time. We're talking back when a program
 looked like a deck of these:</p>
 <p><img src="./images/punched_card_deck.jpg" alt="Image" /></p>
 <p>There were operating systems being researched even very early and when personal computing
@@ -177,7 +177,7 @@ to the operating system.</p>
 </blockquote>
 <h2><a class="header" href="#preemptive-multitasking" id="preemptive-multitasking">Preemptive multitasking</a></h2>
 <p>While non-preemptive multitasking sounded like a good idea, it turned out to
-create serious problems as well. Letting every program and programmer out there be responsible for having a responsive UI in an operating system can ultimately lead to a bad user experience if since every bug out there could halt the entire system.</p>
+create serious problems as well. Letting every program and programmer out there be responsible for having a responsive UI in an operating system can ultimately lead to a bad user experience since every bug out there could halt the entire system.</p>
 <p>The solution was to place the responsibility of scheduling the CPU resources
 between the programs that requested it (including to OS itself) in the hands of
 the OS. The OS can stop the execution of a process, do something else, and switch back.</p>

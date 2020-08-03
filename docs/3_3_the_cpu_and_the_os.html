@@ -203,7 +203,7 @@ know that we're not allowed to dereference this memory?</p>
 <h2><a class="header" href="#down-the-rabbit-hole" id="down-the-rabbit-hole">Down the rabbit hole</a></h2>
 <p>Yes, this is a small rabbit hole. It turns out that there
 is a great deal of co-operation between the OS and the CPU, but maybe not the way you naively would think.</p>
-<p>Many modern CPUs provide some basic infrastructure that Operating Systems use. This infrastructure gives us the security and stability we expect. Actually, most advanced CPUs provide a lot more options than operating systems like Linux, BSD and Windows actually uses.</p>
+<p>Many modern CPUs provide some basic infrastructure that Operating Systems use. This infrastructure gives us the security and stability we expect. Actually, most advanced CPUs provide a lot more options than operating systems like Linux, BSD and Windows actually use.</p>
 <p>There is especially two that I want to address here:</p>
 <ol>
 <li>How the CPU prevents us from accessing memory we're not supposed to access</li>
@@ -226,7 +226,7 @@ a read. It's extremely well written and will answer all these questions and many
 </ul>
 <p>Exactly how this works will differ depending on the exact CPU so we'll treat them
 in general terms here.</p>
-<p>Most modern CPUs, however, has an MMU (Memory Management Unit). This is a part of the
+<p>Most modern CPUs, however, have an MMU (Memory Management Unit). This is a part of the
 CPU (often etched on the same dye even). The MMUs job is to translate between
 the virtual address we use in our programs, to a physical address.</p>
 <p>When the OS starts a process (like our program) it sets up a page table for our
@@ -247,10 +247,10 @@ jumps to that function when we try to dereference <code>99999999999999</code> an
 <h2><a class="header" href="#but-cant-we-just-change-the-page-table-in-the-cpu" id="but-cant-we-just-change-the-page-table-in-the-cpu">But can't we just change the page table in the CPU?</a></h2>
 <p>Now, this is where <code>Privilege Level</code> comes in. Most modern operating systems operate with two <code>Ring Levels</code>. Ring 0, the kernel space, and Ring 3, user-space.</p>
 <p><img src="./images/priv_rings.png" alt="Privilege rings" /></p>
-<p>Most CPUs has a concept of more rings than what most modern operating systems use. This has historical reasons, which is also why <code>Ring 0</code> and <code>Ring 3</code> are used (and not 1, 2).</p>
+<p>Most CPUs have a concept of more rings than what most modern operating systems use. This has historical reasons, which is also why <code>Ring 0</code> and <code>Ring 3</code> are used (and not 1, 2).</p>
 <p>Now every entry in the page table has additional information about it, amongst that information is the information about what ring it belongs to. This information is set up when your OS boots up.</p>
 <p>Code executed in <code>Ring 0</code> has almost unrestricted access to external devices, memory and is free to change registers that provide security at the hardware level.</p>
-<p>Now, the code you write in <code>Ring 3</code> will typically have extremely restricted access to I/O and certain CPU registers (and instructions). Trying to issue an instruction or setting a register from <code>Ring 3</code> to change the <code>page table</code> will be prevented already at the CPU. The CPU will then then treat this as an exception and jump to the handler for that exception provided by the OS.</p>
+<p>Now, the code you write in <code>Ring 3</code> will typically have extremely restricted access to I/O and certain CPU registers (and instructions). Trying to issue an instruction or setting a register from <code>Ring 3</code> to change the <code>page table</code> will be prevented already at the CPU. The CPU will then treat this as an exception and jump to the handler for that exception provided by the OS.</p>
 <p>This is also the reason why you have no other choice than to cooperate with the OS and handle I/O tasks through syscalls. The system wouldn't be very secure if this wasn't the case.</p>
 
                     </main>

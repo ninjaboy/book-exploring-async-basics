@@ -182,8 +182,8 @@
 <li>Can be difficult to implement in a flexible way to handle a wide variety of tasks</li>
 </ul>
 <h2><a class="header" href="#3-poll-based-event-loops-supported-by-the-os" id="3-poll-based-event-loops-supported-by-the-os">3. Poll based event loops supported by the OS</a></h2>
-<p>The third way we're covering today is the one that most closely matches an ideal solution. In this solution the we register an interest in an event, and then let the OS tell us when it's ready.</p>
-<p>The way this works is that we tell the OS that we're interested in knowing when data is arriving for us on the network card. The network card issues an interrupt when something has happened in which the driver lets the OS know that the data is ready.</p>
+<p>The third way we're covering today is the one that most closely matches an ideal solution. In this solution we register an interest in an event, and then let the OS tell us when it's ready.</p>
+<p>The way this works is that we tell the OS that we're interested in knowing when data is arriving for us on the network card. The network card issues an interrupt when something has happened, in which case the driver lets the OS know that the data is ready.</p>
 <p>Now, we still need a way to &quot;suspend&quot; many tasks while waiting, and this is where Node's &quot;runtime&quot; or Rust's Futures come in to play.</p>
 <p><strong>Pros:</strong></p>
 <ul>

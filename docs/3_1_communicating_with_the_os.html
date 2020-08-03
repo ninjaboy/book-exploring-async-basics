@@ -163,7 +163,7 @@
 trivial to make a <code>syscall</code> though which we'll see below.</p>
 <p>Now, <code>syscalls</code> is an example of something that is unique to the kernel you're communicating with, but the UNIX family of kernels has many similarities. UNIX systems expose this through <strong><code>libc</code></strong>.</p>
 <p>Windows, on the other hand, uses its own API, often referred to as WinAPI, and that can be radically different from how the UNIX based systems operate.</p>
-<p>Most often though there is a way to achieve the same things. In terms of functionality, you might not notice a big difference but as we'll see below and especially when we dig into how <code>epoll</code>, <code>kqueue</code> and <code>IOCP</code>, they can differ a lot in how this functionality is implemented.</p>
+<p>Most often though there is a way to achieve the same things. In terms of functionality, you might not notice a big difference but as we'll see below and especially when we dig into how <code>epoll</code>, <code>kqueue</code> and <code>IOCP</code> work, they can differ a lot in how this functionality is implemented.</p>
 <h2><a class="header" href="#syscall-example" id="syscall-example">Syscall example</a></h2>
 <p>To get a bit more familiar with <code>syscalls</code> we'll implement a very basic one for the three architectures: <code>BSD(macos)</code>, <code>Linux</code> and <code>Windows</code>. We'll also see how this is implemented in three levels of abstractions.</p>
 <p>The <code>syscall</code> we'll implement is the one used when we write something to <code>stdout</code> since that is such a common operation and it's interesting to see how it really works.</p>

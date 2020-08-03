@@ -40,9 +40,9 @@ Another common way of handling this is green threads. Languages like Go uses thi
 
 ## 3. Poll based event loops supported by the OS
 
-The third way we're covering today is the one that most closely matches an ideal solution. In this solution the we register an interest in an event, and then let the OS tell us when it's ready.
+The third way we're covering today is the one that most closely matches an ideal solution. In this solution we register an interest in an event, and then let the OS tell us when it's ready.
 
-The way this works is that we tell the OS that we're interested in knowing when data is arriving for us on the network card. The network card issues an interrupt when something has happened in which the driver lets the OS know that the data is ready.
+The way this works is that we tell the OS that we're interested in knowing when data is arriving for us on the network card. The network card issues an interrupt when something has happened, in which case the driver lets the OS know that the data is ready.
 
 Now, we still need a way to "suspend" many tasks while waiting, and this is where Node's "runtime" or Rust's Futures come in to play.
 

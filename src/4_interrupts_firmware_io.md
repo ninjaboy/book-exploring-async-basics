@@ -22,7 +22,7 @@ network card:
 
 > **Disclaimer**
 > We're making things simple here. This is a rather complex operation but we'll
-> focus on what interest us most and skip a few steps along the way.
+> focus on what interests us most and skip a few steps along the way.
 
 ## 1. Our code
 
@@ -60,9 +60,9 @@ queue it will block until one or more event occurs.
 </li>
 </ol>
 
-> My next book will be about about alternative C since that is a very interesting
+> My next book will be about alternative C since that is a very interesting
 > model of handling I/O events that's going to be important later on to understand
-> why Rusts concurrency abstractions are modeled the way they are. Of that reason
+> why Rust's concurrency abstractions are modeled the way they are. For that reason
 > we won't cover this in detail here.
 
 ## 3. The Network Card
@@ -73,16 +73,16 @@ Meanwhile on the network card there is a small microcontroller running
 specialized firmware. We can imagine that this microcontroller is polling in a
 busy loop checking if any data is incoming.
 
-> The exact way the Network Card handles it internals can be different from this
-> (and most likely are). The important part is that there is a very simple but specialized CPU running
-> on the network card doing **work** to check if there is incoming events.
+> The exact way the Network Card handles its internals can be different from this
+> (and most likely is). The important part is that there is a very simple but specialized CPU running
+> on the network card doing **work** to check if there are incoming events.
 
-Once the firmware registers incoming data it issues a Hardware Interrupt.
+Once the firmware registers incoming data, it issues a Hardware Interrupt.
 
 ## 4. Hardware Interrupt
 
 > This is a very simplified explanation. If you're interested in knowing more
-> about how this works I can recommend Robert Mustacchi's excellent article
+> about how this works, I can recommend Robert Mustacchi's excellent article
 [Turtles on the wire: understanding how the OS uses the modern NIC](https://www.joyent.com/blog/virtualizing-nics).
 
 Modern CPUs have a set of `Interrupt Request Lines` for it to handle events that occur from
@@ -90,7 +90,7 @@ external devices. A CPU has a fixed set of interrupt lines.
 
 A hardware interrupt is an electrical signal that can occur at _any time_. The
 CPU immediately **interrupts** its normal workflow to handle the interrupt by
-saving the state of it's registers and look up the interrupt handler. The interrupt handlers is defined in the Interrupt Descriptor Table.
+saving the state of its registers and looking up the interrupt handler. The interrupt handlers are defined in the Interrupt Descriptor Table.
 
 ## 5. Interrupt Handler
 
@@ -131,7 +131,7 @@ Depending on whether we chose alternative A, B or C the OS will:
 
 ## Interrupts
 
-As I hinted at above there are two kinds of interrupts:
+As I hinted at above, there are two kinds of interrupts:
 
 1. Hardware Interrupts
 2. Software Interrupts
@@ -144,14 +144,14 @@ Hardware interrupts are created by sending an electrical signal through an [Inte
 
 ### Software Interrupts
 
-This is interrupts issued from software instead of hardware. As in the case of a hardware interrupt the CPU jumps to the Interrupt Descriptor Table and runs the handler for the specified interrupt.
+These are interrupts issued from software instead of hardware. As in the case of a hardware interrupt, the CPU jumps to the Interrupt Descriptor Table and runs the handler for the specified interrupt.
 
 
 ### Firmware
 
-Firmware doesn't get much attention from most of us, however, they're a crucial part of the world we live in. They run on all kinds of hardware, and has all kinds of strange and peculiar ways to make the computer we program on work.
+Firmware doesn't get much attention from most of us; however, they're a crucial part of the world we live in. They run on all kinds of hardware, and have all kinds of strange and peculiar ways to make the computer we program on work.
 
-When I think about firmware, I think about the scenes from Star Wars where they walk into a bar with all kinds of strange and obscure creatures. I imagine the world of firmware is much like this, few us of know what they do or how they work on a particular system.
+When I think about firmware, I think about the scenes from Star Wars where they walk into a bar with all kinds of strange and obscure creatures. I imagine the world of firmware is much like this, few of us know what they do or how they work on a particular system.
 
 Now, firmware needs a microcontroller or similar to be able to work. Even the CPU has firmware which makes it work. That means there are many more small "CPUs" on our system than the cores we program against.
 

@@ -17,7 +17,7 @@ Now, `syscalls` is an example of something that is unique to the kernel you're c
 
 Windows, on the other hand, uses its own API, often referred to as WinAPI, and that can be radically different from how the UNIX based systems operate.
 
-Most often though there is a way to achieve the same things. In terms of functionality, you might not notice a big difference but as we'll see below and especially when we dig into how `epoll`, `kqueue` and `IOCP`, they can differ a lot in how this functionality is implemented.
+Most often though there is a way to achieve the same things. In terms of functionality, you might not notice a big difference but as we'll see below and especially when we dig into how `epoll`, `kqueue` and `IOCP` work, they can differ a lot in how this functionality is implemented.
 
 ## Syscall example
 

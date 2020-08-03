@@ -2,7 +2,7 @@
 
 In the beginning, computers had one CPU and it executed a set of instructions written
 by a programmer one by one. No scheduling, no threads, no multitasking. This was
-how computers worked for a long time. We're talking back when the days where a program
+how computers worked for a long time. We're talking back when a program
 looked like a deck of these:
 
 ![Image](./images/punched_card_deck.jpg)
@@ -37,7 +37,7 @@ to the operating system.
 ## Preemptive multitasking
 
 While non-preemptive multitasking sounded like a good idea, it turned out to
-create serious problems as well. Letting every program and programmer out there be responsible for having a responsive UI in an operating system can ultimately lead to a bad user experience if since every bug out there could halt the entire system.
+create serious problems as well. Letting every program and programmer out there be responsible for having a responsive UI in an operating system can ultimately lead to a bad user experience since every bug out there could halt the entire system.
 
 The solution was to place the responsibility of scheduling the CPU resources
 between the programs that requested it (including to OS itself) in the hands of

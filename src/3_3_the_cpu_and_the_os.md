@@ -60,7 +60,7 @@ know that we're not allowed to dereference this memory?
 Yes, this is a small rabbit hole. It turns out that there
 is a great deal of co-operation between the OS and the CPU, but maybe not the way you naively would think.
 
-Many modern CPUs provide some basic infrastructure that Operating Systems use. This infrastructure gives us the security and stability we expect. Actually, most advanced CPUs provide a lot more options than operating systems like Linux, BSD and Windows actually uses.
+Many modern CPUs provide some basic infrastructure that Operating Systems use. This infrastructure gives us the security and stability we expect. Actually, most advanced CPUs provide a lot more options than operating systems like Linux, BSD and Windows actually use.
 
 There is especially two that I want to address here:
 
@@ -87,7 +87,7 @@ As I mentioned, modern CPUs have already some definition of basic concepts. Some
 Exactly how this works will differ depending on the exact CPU so we'll treat them
 in general terms here.
 
-Most modern CPUs, however, has an MMU (Memory Management Unit). This is a part of the
+Most modern CPUs, however, have an MMU (Memory Management Unit). This is a part of the
 CPU (often etched on the same dye even). The MMUs job is to translate between
 the virtual address we use in our programs, to a physical address.
 
@@ -120,12 +120,12 @@ Now, this is where `Privilege Level` comes in. Most modern operating systems ope
 
 ![Privilege rings](./images/priv_rings.png)
 
-Most CPUs has a concept of more rings than what most modern operating systems use. This has historical reasons, which is also why `Ring 0` and `Ring 3` are used (and not 1, 2).
+Most CPUs have a concept of more rings than what most modern operating systems use. This has historical reasons, which is also why `Ring 0` and `Ring 3` are used (and not 1, 2).
 
 Now every entry in the page table has additional information about it, amongst that information is the information about what ring it belongs to. This information is set up when your OS boots up.
 
 Code executed in `Ring 0` has almost unrestricted access to external devices, memory and is free to change registers that provide security at the hardware level.
 
-Now, the code you write in `Ring 3` will typically have extremely restricted access to I/O and certain CPU registers (and instructions). Trying to issue an instruction or setting a register from `Ring 3` to change the `page table` will be prevented already at the CPU. The CPU will then then treat this as an exception and jump to the handler for that exception provided by the OS.
+Now, the code you write in `Ring 3` will typically have extremely restricted access to I/O and certain CPU registers (and instructions). Trying to issue an instruction or setting a register from `Ring 3` to change the `page table` will be prevented already at the CPU. The CPU will then treat this as an exception and jump to the handler for that exception provided by the OS.
 
 This is also the reason why you have no other choice than to cooperate with the OS and handle I/O tasks through syscalls. The system wouldn't be very secure if this wasn't the case.

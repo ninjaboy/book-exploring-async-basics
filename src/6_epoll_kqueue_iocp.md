@@ -15,7 +15,7 @@ Since we want
 to understand how everything works, I decided to create an extremely
 simplified version of an event queue. I called it `minimio` since it's greatly inspired by `mio`.
 
-> I have written a about how this works in detail called [Epoll, Kqueue and IOCP explained](https://cfsamsonbooks.gitbook.io/epoll-kqueue-iocp-explained/). 
+> I have written about how this works in detail in [Epoll, Kqueue and IOCP explained](https://cfsamsonbooks.gitbook.io/epoll-kqueue-iocp-explained/). 
 > In that book we also create the event loop which we will use as the cross platform eventloop in this book. You can visit the code at its [Github repository if you're
 > curious](https://github.com/cfsamson/examples-minimio).
 
@@ -32,7 +32,7 @@ So blocking operations are the least flexible to use for us as programmers since
 
 Non-blocking methods are more flexible but need to have a way to tell us if a task is ready or not. This is most often done by returning some kind of data that says if it's `Ready` or `NotReady`. One drawback is that we need to check this status regularly to be able to tell if the state has changed.
 
-Event queuing via Epoll/kqueue/IOCP is a way to combine the flexibility of a non-blocking method without its aforementioned drawback.
+Event queuing via Epoll/kqueue/IOCP is a way to enjoy the flexibility of a non-blocking method without its aforementioned drawback.
 
 > We will not cover methods like `poll` and `select`, but I have an [article for you
 > here](http://web.archive.org/web/20190112082733/https://people.eecs.berkeley.edu/~sangjin/2012/12/21/epoll-vs-kqueue.html)

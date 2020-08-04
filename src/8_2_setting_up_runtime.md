@@ -178,9 +178,9 @@ let epoll_thread = thread::Builder::new()
                 Ok(v) if v > 0 => {
                     for i in 0..v {
                         let event = events.get_mut(i).expect("No events in event list.");
-                        print(format!("epoll event {} is ready", event.id().value()));
+                        print(format!("epoll event {} is ready", event.id()));
 
-                        let event = PollEvent::Epoll(event.id().value() as usize);
+                        let event = PollEvent::Epoll(event.id());
                         event_sender.send(event).expect("epoll event");
                     }
                 }
@@ -309,9 +309,9 @@ match poll.poll(&mut events, timeout) {
     Ok(v) if v > 0 => {
         for i in 0..v {
             let event = events.get_mut(i).expect("No events in event list.");
-            print(format!("epoll event {} is ready", event.id().value()));
+            print(format!("epoll event {} is ready", event.id()));
 
-            let event = PollEvent::Epoll(event.id().value() as usize);
+            let event = PollEvent::Epoll(event.id());
             event_sender.send(event).expect("epoll event");
         }
     }
@@ -452,9 +452,9 @@ impl Runtime {
                         Ok(v) if v > 0 => {
                             for i in 0..v {
                                 let event = events.get_mut(i).expect("No events in event list.");
-                                print(format!("epoll event {} is ready", event.id().value()));
+                                print(format!("epoll event {} is ready", event.id()));
 
-                                let event = PollEvent::Epoll(event.id().value() as usize);
+                                let event = PollEvent::Epoll(event.id());
                                 event_sender.send(event).expect("epoll event");
                             }
                         }

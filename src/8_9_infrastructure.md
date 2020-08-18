@@ -160,7 +160,7 @@ Let's first have a look at the arguments to this function (aside from `&mut self
 `task: impl Fn() -> Js + Send + 'static` is a task we want to run on a separate
 thread. This closure has the bond: `Fn() -> Js + Send + 'static` which means
 it's a `closure` that takes no arguments, but returns a type of `Js`. It needs to
-be `'Send` since we're sending this task to another thread.
+be `Send` since we're sending this task to another thread.
 
 `kind: ThreadPoolTaskKind` lets us know what kind of task this. We do this for
 two reasons:

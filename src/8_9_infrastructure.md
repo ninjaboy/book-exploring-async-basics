@@ -8,7 +8,7 @@ First of all, we need a way to get the `id` of an available thread.
    fn get_available_thread(&mut self) -> usize {
         match self.available_threads.pop() {
             Some(thread_id) => thread_id,
-            // We would normally return None and the request and not panic!
+            // We would normally return None and not panic!
             None => panic!("Out of threads."),
         }
     }

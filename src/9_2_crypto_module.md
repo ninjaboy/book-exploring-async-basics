@@ -27,6 +27,7 @@ impl Crypto {
     }
 }
 ```
+
 Well, um, this is disappointing if you're into crypto. I'm sorry. The logic here is not very interesting, we take a number `n` as argument and calculate
 the n'th fibonacchi number recursively. A famous and inefficient way of putting your
 CPU to work.

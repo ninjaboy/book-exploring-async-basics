@@ -8,7 +8,7 @@ looked like a deck of these:
 ![Image](./images/punched_card_deck.jpg)
 
 There were operating systems being researched even very early and when personal computing
-started to grow in the '80s operating systems like DOS was the standard on most consumer
+started to grow in the 80s, operating systems like DOS were the standard on most consumer
 PCs.
 
 These operating systems usually yielded control of the entire CPU to the program currently executing and it was
@@ -29,10 +29,9 @@ Besides off-loading a huge responsibility to every programmer writing a program
 for your platform, this was naturally error-prone. A small mistake in a programs code
 could halt or crash the entire system.
 
->If you remember Windows 95, you also remember the times when a window hung and you could paint the entire screen with it (almost the same way as the end in Solitaire, the card game that came with Windows).
+> If you remember Windows 95, you also remember the times when a window hung and you could paint the entire screen with it (almost the same way as the end in Solitaire, the card game that came with Windows).
 >
-> This was reportedly a typical error in the code that was supposed to yield control
-to the operating system.
+> This was reportedly a typical error in the code that was supposed to yield control to the operating system.
 
 ## Preemptive multitasking
 
@@ -100,7 +99,7 @@ they will immediately stop and give control to an interrupt handler. This is how
 the CPU handles concurrency.
 
 
-> \* However, modern CPU can also do a lot of things in parallel. Most CPUs are
+> \* However, modern CPUs can also do a lot of things in parallel. Most CPUs are
 > pipelined, meaning that the next instruction is loaded while the current is
 > executing. It might have a branch predictor that tries to figure out what
 > instructions to load next.

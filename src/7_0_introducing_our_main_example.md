@@ -94,13 +94,14 @@ Our code here is mostly calling functions that register an event and stores a
 callback to be run when the event is ready.
 
 **An example of this is the `set_timeout` function:**
+
 ```rust, no_run
 set_timeout(0, |_res| {
     print("Immediate1 timed out");
 });
 ```
 
-What we really do here is register interest in a `timeout` event, and when that event occurs we want to run the
+What we really do here is register interest in a `timeout` event, and when that event occurs we want to run
 the callback `|_res| { print("Immediate1 timed out"); }`.
 
 Now the parameter `_res` is
@@ -116,6 +117,7 @@ Can't display video.
 </video>
 
 And here is what our output will look like:
+
 ```
 Thread: main     First call to read test.txt
 Thread: main     Registering immediate timeout 1
@@ -183,5 +185,3 @@ Thread: main     FINISHED
 
 Don't worry, we'll explain everything, but I just wanted to start off by
 explaining where we want to end up.
-
-

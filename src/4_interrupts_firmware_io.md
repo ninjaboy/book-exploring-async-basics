@@ -27,7 +27,7 @@ network card:
 ## 1. Our code
 
 We register a socket. This happens by issuing a `syscall` to the OS. Depending
-on the OS we either get a  `file descriptor` (Macos/Linux) or a `socket` (Windows).
+on the OS we either get a  `file descriptor` (macOS/Linux) or a `socket` (Windows).
 
 The next step is that we register our interest in `read` events on that socket.
 
@@ -39,15 +39,15 @@ The next step is that we register our interest in `read` events on that socket.
 <li>
 We tell the operating system that we're interested in `Read` events but we want
 to wait for it to happen by `yielding` control over our thread to the OS. The OS
-then suspends our thread by storing the register state and switch to some other
-thread.
+then suspends our thread by storing the register state and switches to some
+other thread.
 
 **From our perspective this will be blocking our thread until we have data to read.**
 </li>
 <li>
 We tell the operating system that we're interested in `Read` events but we
-just want a handle to a the task which we can `poll` to check if the event is
-ready or not.
+just want a handle to a task which we can `poll` to check if the event is ready
+or not.
 
 **The OS will not suspend our thread, so this will not block our code**
 </li>
@@ -128,7 +128,6 @@ Depending on whether we chose alternative A, B or C the OS will:
 2. Return `Ready` on the next `poll`
 3. Wake the thread and return a `Read` event for the handler we registered.
 
-
 ## Interrupts
 
 As I hinted at above, there are two kinds of interrupts:
@@ -145,7 +144,6 @@ Hardware interrupts are created by sending an electrical signal through an [Inte
 ### Software Interrupts
 
 These are interrupts issued from software instead of hardware. As in the case of a hardware interrupt, the CPU jumps to the Interrupt Descriptor Table and runs the handler for the specified interrupt.
-
 
 ### Firmware
 

@@ -15,8 +15,8 @@ Since we want
 to understand how everything works, I decided to create an extremely
 simplified version of an event queue. I called it `minimio` since it's greatly inspired by `mio`.
 
-> I have written about how this works in detail in [Epoll, Kqueue and IOCP explained](https://cfsamsonbooks.gitbook.io/epoll-kqueue-iocp-explained/). 
-> In that book we also create the event loop which we will use as the cross platform eventloop in this book. You can visit the code at its [Github repository if you're
+> I have written about how this works in detail in [Epoll, Kqueue and IOCP explained](https://cfsamsonbooks.gitbook.io/epoll-kqueue-iocp-explained/).
+> In that book we also create the event loop which we will use as the cross platform event loop in this book. You can visit the code at its [Github repository if you're
 > curious](https://github.com/cfsamson/examples-minimio).
 
 Nevertheless, we'll give each of them a brief introduction here so you know the basics.
@@ -25,7 +25,7 @@ Nevertheless, we'll give each of them a brief introduction here so you know the 
 
 If you remember my previous chapters, you know that we need to cooperate closely
 with the OS to make I/O operations as efficient as possible. Operating systems like
-Linux, MacOS and Windows provide several ways of performing I/O, both blocking and
+Linux, macOS and Windows provide several ways of performing I/O, both blocking and
 non-blocking.
 
 So blocking operations are the least flexible to use for us as programmers since we yield control to the OS, which suspends our thread. The big advantage is that our thread gets woken up once the event we're waiting for is ready.
@@ -66,14 +66,13 @@ Below is a basic breakdown of what happens in this type of event queue:
    completed.
 5. Our thread is unblocked, and our buffer is now filled with the data we're interested in.
 
-
 ## Epoll
 
 `Epoll` is the Linux way of implementing an event queue. In terms of functionality, it has a lot in common with `Kqueue`. The advantage of using `epoll` over other similar methods on Linux like `select` or `poll` is that `epoll` was designed to work very efficiently with a large number of events.
 
 ### Kqueue
 
-`Kqueue` is the MacOS way of implementing an event queue, which originated from BSD, in operating systems such as FreeBSD, OpenBSD, etc. In terms of high level functionality,
+`Kqueue` is the macOS way of implementing an event queue, which originated from BSD, in operating systems such as FreeBSD, OpenBSD, etc. In terms of high level functionality,
 it's similar to `Epoll` in concept but different in actual use.
 
 Some argue it's a bit more complex to use and a bit more abstract and "general".

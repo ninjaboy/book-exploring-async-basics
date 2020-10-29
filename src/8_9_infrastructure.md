@@ -13,6 +13,7 @@ First of all, we need a way to get the `id` of an available thread.
         }
     }
 ```
+
 As you see, we take one huge shortcut here. If we run out of threads, we `panic!`.
 This is not good, and we should rather implement logic to queue these requests
 and run them as soon as a thread is available. However, our code is already getting
@@ -22,8 +23,8 @@ Maybe this implementing such a queue is a good reader-exercise? Feel free to for
 the repository and go ahead :)
 
 The next thing we need to do is to create an unique identity for our callbacks.
-```rust
 
+```rust
 /// If we hit max we just wrap around
 fn generate_identity(&mut self) -> usize {
     self.identity_token = self.identity_token.wrapping_add(1);
@@ -34,10 +35,10 @@ fn generate_cb_identity(&mut self) -> usize {
     let ident = self.generate_identity();
     let taken = self.callback_queue.contains_key(&ident);
 
-    // if there is a collision or the identity is already there we loop until we
+    // if there is a collision or the identity is already there, we loop until we
     // find a new one. We don't cover the case where there are `usize::max_value()`
-    // number of callbacks waiting since that if we're fast and queue a new event
-    // every nanosecond that will stilltake 585 years to do on a 64 bit system.
+    // callbacks waiting, since if we're fast and queue a new event
+    // every nanosecond, that would still take 585 years on a 64 bit system.
     if !taken {
         ident
     } else {
@@ -50,13 +51,14 @@ fn generate_cb_identity(&mut self) -> usize {
     }
 }
 ```
+
 The function `generate_cb_identity` is where it all happens, `genereate_identity` is just
 a small function so we try to avoid the long functions we had in the introduction.
 
->Now, there are some important considerations to be aware of. Even though we use
->several threads, we use a regular `usize` here and the reason for that is that
->it's only one thread that will be generating Id's. This could cause problems if
->several threads tried to `read` and `generate` new Id's at the same time.
+> Now, there are some important considerations to be aware of. Even though we use
+> several threads, we use a regular `usize` here and the reason for that is that
+> it's only one thread that will be generating Id's. This could cause problems if
+> several threads tried to `read` and `generate` new Id's at the same time.
 
 We use the `wrapping_add` method on `usize` to get the next Id, this means that
 when we reach `18446744073709551615` we wrap around to 0 again.
@@ -66,6 +68,7 @@ by design), and if it's taken we just generate a new one until we find a availab
 one.
 
 Next up is the method we use to add a callback to our `callback_queue`:
+
 ```rust
 /// Adds a callback to the queue and returns the key
 fn add_callback(&mut self, ident: usize, cb: impl FnOnce(Js) + 'static) {
@@ -73,6 +76,7 @@ fn add_callback(&mut self, ident: usize, cb: impl FnOnce(Js) + 'static) {
     self.callback_queue.insert(ident, boxed_cb);
 }
 ```
+
 If you haven't seen the signature `cb: impl FnOnce(Js) + 'static` before I'll
 explain it briefly here.
 
@@ -97,7 +101,7 @@ on the heap using `Box`. We do the latter since that's the only thing that makes
 sense for our use case. Box is a pointer to a heap allocated variable which we do
 know the size of so we store that reference in our `callback_queue` HashMap.
 
->What makes a closure?
+> What makes a closure?
 > A function in rust can be defined as easily as `|| { }`. If this is all we write
 > it's the same as a function pointer, equivalent to just referencing `my_method` (without parenthesis).
 > It becomes a `closure` as soon as you "close" over your environment by referencing
@@ -155,6 +159,7 @@ pub fn register_event_threadpool(
     self.pending_events += 1;
 }
 ```
+
 Let's first have a look at the arguments to this function (aside from `&mut self`).
 
 `task: impl Fn() -> Js + Send + 'static` is a task we want to run on a separate

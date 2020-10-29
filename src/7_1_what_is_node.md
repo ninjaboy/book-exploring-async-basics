@@ -55,7 +55,7 @@ Tasks that are predominately CPU intensive are handled by a thread pool. The def
 
 I/O tasks which can't be handled by the cross platform event queue are also handled here, which is the case with file reads that we use in our example.
 
-Most C++ extensions for Node uses this thread pool to perform their work, and that is one of many reasons they are used for calculation-intensive tasks.
+Most C++ extensions for Node use this thread pool to perform their work, and that is one of many reasons they are used for calculation-intensive tasks.
 
 ## Further Information
 
@@ -71,6 +71,4 @@ This first talk one is held by [@piscisaureus](https://github.com/piscisaureus) 
 The second one is slightly longer but is also an excellent talk held by [Bryan Hughes](https://github.com/nebrius)
 <iframe width="560" height="315" src="https://www.youtube.com/embed/zphcsoSJMvM" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-
 Now, relax, get a cup of tea and sit back while we go through everything together.
-

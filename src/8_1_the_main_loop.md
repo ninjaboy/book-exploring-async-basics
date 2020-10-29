@@ -17,7 +17,6 @@ impl Runtime {
 
 ## Initialization
 
-
 ```rust, no_run
 let rt_ptr: *mut Runtime = &mut self;
 unsafe { RUNTIME = rt_ptr };
@@ -34,7 +33,7 @@ variable `RUNTIME`.
 We could instead pass our `runtime` around but that wouldn't
 be very ergonomic. Another option would be to use `lazy_static` crate to initialize this field in a slightly safer way, but we'd have to explain what `lazy_static` do to keep our promise of minimal "magic".
 
-To be honest, we only set this once, and it's set at the start of of our eventloop and we only access this from the same thread we created it. It might not be pretty but it's safe.
+To be honest, we only set this once, and it's set at the start of of our event loop and we only access this from the same thread we created it. It might not be pretty but it's safe.
 
 `ticks` is only a counter for us to keep track of how many times we've looped which for display.
 
@@ -48,7 +47,7 @@ while self.pending_events > 0 {
     ticks += 1;
 ```
 
-`self.pending_events` keeps track of how many pending events we have, so that when no events are left we exit the loop since our eventloop is finished.
+`self.pending_events` keeps track of how many pending events we have, so that when no events are left we exit the loop since our event loop is finished.
 
 So where does these events come from? In our `javascript` function `f` which we introduced in the chapter [Introducing our main example](./7_0_introducing_our_main_example.md) you probably noticed that we called functions like
 `set_timeout` and `Fs::read`. These functions are defined in the Node runtime
@@ -140,9 +139,8 @@ We'll explain these methods in the following chapters.
 // an set immediate function could be added pretty easily but we won't that here
 ```
 
-Node implements a check "hook" to the eventloop next. Calls to `setImmidiate`
-execute here. I just include it for for completeness but we won't do anything in this phase.
-
+Node implements a check "hook" to the event loop next. Calls to `setImmediate`
+execute here. I just include it for completeness but we won't do anything in this phase.
 
 ## 6. Close Callbacks
 
@@ -160,7 +158,7 @@ like closing sockets, is done here.
 Since our `run` function basically will be the start and end of our `Runtime` we also need to clean up after ourselves. The following code makes sure all threads finish, release their resources and run all destructors:
 
 ```rust
-// We clean up our resources, makes sure all destructors runs.
+// We clean up our resources, makes sure all destructors run.
 for thread in self.thread_pool.into_iter() {
     thread.sender.send(Task::close()).expect("threadpool cleanup");
     thread.handle.join().unwrap();
@@ -184,7 +182,7 @@ pub fn run(mut self, f: impl Fn()) {
     let rt_ptr: *mut Runtime = &mut self;
     unsafe { RUNTIME = rt_ptr };
 
-    // just for us priting out during execution
+    // just for us printing out during execution
     let mut ticks = 0;
 
     // First we run our "main" function
@@ -193,7 +191,7 @@ pub fn run(mut self, f: impl Fn()) {
     // ===== EVENT LOOP =====
     while self.pending_events > 0 {
         ticks += 1;
-        // NOT PART OF LOOP, JUST FOR US TO SEE WHAT TICK IS EXCECUTING
+        // NOT PART OF LOOP, JUST FOR US TO SEE WHAT TICK IS EXECUTING
         print(format!("===== TICK {} =====", ticks));
 
         // ===== 2. TIMERS =====
@@ -241,7 +239,7 @@ pub fn run(mut self, f: impl Fn()) {
         self.run_callbacks();
 
         // ===== 5. CHECK =====
-        // an set immidiate function could be added pretty easily but we
+        // an set immediate function could be added pretty easily but we
         // won't do that here
 
         // ===== 6. CLOSE CALLBACKS ======
@@ -249,7 +247,7 @@ pub fn run(mut self, f: impl Fn()) {
         // where sockets etc are closed.
     }
 
-    // We clean up our resources, makes sure all destructors runs.
+    // We clean up our resources, makes sure all destructors run.
     for thread in self.thread_pool.into_iter() {
         thread.sender.send(Task::close()).expect("threadpool cleanup");
         thread.handle.join().unwrap();
@@ -261,7 +259,6 @@ pub fn run(mut self, f: impl Fn()) {
     print("FINISHED");
 }
 ```
-
 
 ## Shortcuts
 

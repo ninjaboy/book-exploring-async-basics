@@ -26,9 +26,7 @@ So when we've got a `callback_id` we find the corresponding callback we have sto
 
 `cb(data)` runs the code in this closure. After it's done it's time to decrease our counter of pending events: `self.pending_events -= 1;`.
 
-> Now, this step is important. As you might understand, any long running code in this callback is going to block our `eventloop`, preventing it from progressing. So no new callbacks are handled and no new events are registered. This is why it's bad to write code that blocks the eventloop.
-
-
+> Now, this step is important. As you might understand, any long running code in this callback is going to block our `event loop`, preventing it from progressing. So no new callbacks are handled and no new events are registered. This is why it's bad to write code that blocks the event loop.
 
 Let's recap by looking at what members of the `Runtime` struct we used here:
 

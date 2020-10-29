@@ -17,24 +17,27 @@ but not at the same time. Another is to progress tasks at the exact same time in
 ## Lets start off with some definitions
 
 ### Resource
+
 Something we need to be able to progress a task. Our resources are limited. This
 could be CPU time or memory.
 
 ### Task
+
 A set of operations that requires some kind of resource to progress. A task must
 consist of several sub-operations.
 
 ### Parallel
+
 Something happening independently at the **exact** same time.
 
 ### Concurrent
+
 Tasks that are **`in progress`** at the same time, but not *necessarily* progressing
 simultaneously.
 
 This is an important distinction. If two tasks are running concurrently,
 but are not running in parallel, they must be able to stop and resume their progress.
 We say that a task is `interruptable` if it allows for this kind of concurrency.
-
 
 ## The mental model I use.
 
@@ -48,7 +51,6 @@ The **why** has everything to do with resource utilization and [efficiency](http
 
 > Efficiency is the (often measurable) ability to avoid wasting materials, energy, efforts, money, and time in doing something or in producing a desired result.
 
-
 ### Parallelism
 
 Is increasing the resources we use to solve a task. It has nothing to do with _efficiency_.
@@ -58,7 +60,6 @@ Is increasing the resources we use to solve a task. It has nothing to do with _e
 Has everything to do with efficiency and resource utilization. Concurrency can never make _one single task go faster_.
 It can only help us utilize our resources better and thereby _finish a set of tasks faster_.
 
-
 ### Let's draw some parallels to process economics
 
 In businesses that manufacture goods, we often talk about LEAN processes. And this is pretty easy to compare with why programmers care so much about what we can achieve if we handle tasks concurrently.
@@ -67,7 +68,7 @@ I'll let let this 3 minute video explain it for me:
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/Oz8BR5Lflzg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-Ok, so it's not the newest video on the subject, but it explains a lot in 3 minutes. Most importantly the gains we try to achieve when applying LEAN techniques, and most importantly: **eliminate waiting and non-value-adding tasks.**
+OK, so it's not the newest video on the subject, but it explains a lot in 3 minutes. Most importantly the gains we try to achieve when applying LEAN techniques, and most importantly: **eliminate waiting and non-value-adding tasks.**
 
 > In programming we could say that we want to avoid `blocking` and `polling` (in a busy loop).
 
@@ -106,8 +107,7 @@ you can work on in parallel.
 **I can see two major use cases for concurrency:**
 
 1. When performing I/O and you need to wait for some external event to occur
-2. When you need to divide your attention and prevent one task from waiting too
-long
+2. When you need to divide your attention and prevent one task from waiting too long
 
 The first is the classic I/O example: you have to wait for a network
 call, a database query or something else to happen before you can progress a

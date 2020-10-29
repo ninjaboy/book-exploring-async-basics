@@ -183,7 +183,7 @@ pub struct Runtime {
     epoll_registrator: minimio::Registrator,
     // The handle to our epoll thread
     epoll_thread: thread::JoinHandle<()>,
-    /// None = infinite, Some(n) = timeout in n ms, Some(0) = immidiate
+    /// None = infinite, Some(n) = timeout in n ms, Some(0) = immediate
     epoll_timeout: Arc<Mutex<Option<i32>>>,
     /// Channel used by both our threadpool and our epoll thread to send events
     /// to the main loop
@@ -379,7 +379,7 @@ impl Runtime {
             self.run_callbacks();
 
             // ===== 5. CHECK =====
-            // an set immidiate function could be added pretty easily but we
+            // an set immediate function could be added pretty easily but we
             // won't do that here
 
             // ===== 6. CLOSE CALLBACKS ======
@@ -387,7 +387,7 @@ impl Runtime {
             // where sockets etc are closed.
         }
 
-        // We clean up our resources, makes sure all destructors runs.
+        // We clean up our resources, makes sure all destructors run.
         for thread in self.thread_pool.into_iter() {
             thread.sender.send(Task::close()).expect("threadpool cleanup");
             thread.handle.join().unwrap();

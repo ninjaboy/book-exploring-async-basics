@@ -50,7 +50,7 @@ understanding of how async code works in general, and the different strategies t
 
 - Think using our research to write a **toy** node.js runtime is pretty cool.
 
-- Want to know more about what the Node eventloop really is, and why most diagrams of it on the web are pretty misleading.
+- Want to know more about what the Node event loop really is, and why most diagrams of it on the web are pretty misleading.
 
 - Already know some Rust but want to learn more.
 
@@ -86,15 +86,15 @@ will not repeat everything here. However, it's definitely not a must.
 
 ## Disclaimer
 
-1. We'll implement a **toy** version of the Node.js eventloop (a bad, but working and conceptually similar eventloop)
+1. We'll implement a **toy** version of the Node.js event loop (a bad, but working and conceptually similar event loop)
 
 2. We'll **not** primarily focus on code quality and safety, though this is important,
-I will focus on understanding the concepts and ideas behind the code. We will have to make
-many shortcuts to keep this concise and short.
+   I will focus on understanding the concepts and ideas behind the code. We will have to make
+   many shortcuts to keep this concise and short.
 
 3. I will however do my best to point out hazards and the shortcuts we make.
-I will try to point out obvious places we could do a better job or take big
-shortcuts.
+   I will try to point out obvious places we could do a better job or take big
+   shortcuts.
 
 > Even though we
 > cover some complex topics we'll have to simplify them significantly to be able

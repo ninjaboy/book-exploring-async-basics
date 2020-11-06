@@ -20,7 +20,6 @@ Now one way of accomplishing this is letting the OS take care of everything for 
 - The OS has many things it needs to handle. It might not switch back to your thread as fast as you'd wish
 - The OS doesn't know which tasks to prioritize, and you might want to give some tasks a higher priority than others.
 
-
 ## 2. Green threads
 
 Another common way of handling this is green threads. Languages like Go uses this to great success. In many ways this is similar to what the OS does but the runtime can be better adjusted and suited to your specific needs.
@@ -36,7 +35,6 @@ Another common way of handling this is green threads. Languages like Go uses thi
 
 - You need a runtime, and by having that you are duplicating part of the work the OS already does. The runtime will have a cost which in some cases can be substantial.
 - Can be difficult to implement in a flexible way to handle a wide variety of tasks
-
 
 ## 3. Poll based event loops supported by the OS
 
@@ -58,7 +56,6 @@ Now, we still need a way to "suspend" many tasks while waiting, and this is wher
 - Great flexibility comes with a good deal of complexity
 - Difficult to write an ergonomic API with an abstraction layer that accounts for the differences between the operating systems without introducing unwanted costs.
 - Only solves part of the problem—the programmer still needs a strategy for suspending tasks that are waiting.
-
 
 ## Final note
 

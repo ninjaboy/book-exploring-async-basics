@@ -25,7 +25,6 @@ The operating system will make sure that all important processes get some time f
 > is that you can't know for sure and there is no guarantee that your code will be
 > left to run uninterrupted.
 
-
 ## Teaming up with the OS.
 
 When programming it's often easy to forget how many moving pieces that need to

@@ -95,6 +95,7 @@ impl Task {
     }
 }
 ```
+
 We need a task object, which represents a task we want to finish in our thread
 pool. I'll go through the types in this object in a later [chapter](./8_9_infrastructure.md) so don't worry too much about them now if you find them
 hard to grasp. Everything will be explained.
@@ -177,8 +178,8 @@ impl Js {
 
 ## PollEvent
 
-Next we have a the `PollEvent`. While we defined an `enum` to represent what
-kind of events we could send **to** the `eventpool` we define some events
+Next we have the `PollEvent`. While we defined an `enum` to represent what
+kind of events we could send **to** the `eventpool`, we define some events
 that we can accept back from both our `epoll based` event queue and our `threadpool`.
 
 ```rust,no_run

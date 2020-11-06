@@ -43,7 +43,6 @@ and when. To help with that we define three extra methods:
 
 `current` is just a shortcut for us to get the name of the current thread. Since we want to track what's happening, we're going to need to print out which thread is issuing what output, so this will avoid cluttering up our code too much along the way.
 
-
 ## Minimio
 
 Minimio is a cross platform epoll/kqueue/IOCP based event loop that we will cover in the next book. I originally included it here, but implementing that for three architectures turned out to be a bit more involved than I first thought and needed more space than would fit in this book.

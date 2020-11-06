@@ -46,6 +46,7 @@ fn main() {
 #     res
 # }
 ```
+
 Now we get a segmentation fault. Not surprising really, but how does the CPU
 know that we're not allowed to dereference this memory?
 
@@ -72,7 +73,6 @@ _We'll cover the first one here and the second in the next chapter._
 > If you want to know more about how this works in detail I will absolutely
 > recommend that you give [Philipp Oppermann's excellent series](https://os.phil-opp.com/)
 > a read. It's extremely well written and will answer all these questions and many more.
-
 
 ## How does the CPU prevent us from accessing memory we're not supposed to?
 

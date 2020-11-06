@@ -2,7 +2,7 @@
 
 ## The Threadpool
 
-We still don't have a threadpool or a I/O eventloop running
+We still don't have a threadpool or a I/O event loop running
 so the next step is to set this up.
 
 ### Let's take this step by step
@@ -242,6 +242,7 @@ we can send this to our `epoll` thread.
 
 Next up is spawning our thread. We do this the exact same way as for the thread
 pool, but we name the thread `epoll`.
+
 ```rust, no_run
 let epoll_thread = thread::Builder::new()
     .name("epoll".to_string())
@@ -376,6 +377,7 @@ Worth noting is that we know all threads are available here so `(0..4).collect()
 will just create a `Vec<usize>` with the values `[0, 1, 2, 3]`.
 
 In Rust, when we write...
+
 ```rust
 ...
 epoll_registrator: registrator,

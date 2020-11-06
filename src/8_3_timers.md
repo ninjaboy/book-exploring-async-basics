@@ -35,7 +35,7 @@ The first thing to note here is that we check `self.timers` and to understand th
 rest of the syntax we'll have to look what kind of collection this is.
 
 Now I chose a `BTreeMap<Instant, usize>` for this collection. The reason is that
-i want to have many `Instant`'s chronologically. When I add a timer, I calculate
+I want to have many `Instant`'s chronologically. When I add a timer, I calculate
 at what instance it's supposed to be run and I add that to this collection.
 
 > BTrees are a very good data structure when you know that your keys will be ordered.
@@ -49,7 +49,7 @@ operation without allocating a small buffer every time. You can iterate over the
 but due to the ownership rules you can't remove them at the same time, and we want to
 remove the timers, that we're done with.
 
-The eventloop will run repeatedly so avoiding any allocations inside the loop is smart. There is no need to have this overhead.
+The event loop will run repeatedly, so avoiding any allocations inside the loop is smart. There is no need to have this overhead.
 
 ```rust
 while let Some(key) = timers_to_remove.pop() {

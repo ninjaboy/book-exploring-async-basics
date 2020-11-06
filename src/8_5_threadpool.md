@@ -10,7 +10,7 @@ file I/O will be `Ready` almost immediately, so waiting for that in a event queu
 has very little effect in practice.
 
 The second reason is that while Windows do have a completion based model, Linux
-and Macos doesn't. Reading a file into a buffer which your process controls can take some
+and macOS doesn't. Reading a file into a buffer which your process controls can take some
 time, and if we do that in our main loop it will block a little bit which we really try
 to avoid.
 

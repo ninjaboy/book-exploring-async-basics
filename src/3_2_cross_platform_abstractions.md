@@ -1,10 +1,10 @@
 # About writing cross-platform abstractions
 
-If you isolate the code needed only for Linux and MacOS, you'll see that it's not many lines of code to write. But once you want to make a cross-platform variant, the amount of code explodes.
+If you isolate the code needed only for Linux and macOS, you'll see that it's not many lines of code to write. But once you want to make a cross-platform variant, the amount of code explodes.
 
 This is a recurring problem when we're curious about how this works on three different platforms, but we need some basic understanding of how the different operating systems work under the covers.
 
-My experience, in general, is that Linux and MacOS have simpler API requiring fewer lines of code, and often (but not always) the exact same call works for both systems.
+My experience, in general, is that Linux and macOS have simpler API requiring fewer lines of code, and often (but not always) the exact same call works for both systems.
 
 Windows, on the other hand, is more complex, requires you to set up more structures to pass information (instead of using primitives), and often way more lines of code. What Windows does have is very good documentation so even though it's more work you'll also find the official documentation very helpful.
 

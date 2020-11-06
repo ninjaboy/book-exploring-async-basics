@@ -79,10 +79,10 @@ well implemented. The only system that does this pretty good is Windows since it
 uses a `completion` based model (which means it can let you know when the data is
 read into your buffer).
 
-> With the introduction of [io_uring](https://kernel.dk/io_uring.pdf) linux has arguably made
+> With the introduction of [io_uring](https://kernel.dk/io_uring.pdf) Linux has arguably made
 significant improvements in this regard, and now supports a _completion_ based model as well. At the
 time of writing this book it's still early but the reports so far has been very promising. We
-might expect to see changes in the way we handle cross platform eventloops in the future due to the
+might expect to see changes in the way we handle cross platform event loops in the future due to the
 fact that there is now two major systems supporting high performance completion based models.
 
 It makes sense for a completion based model to try to do this asynchronously, but
@@ -90,7 +90,7 @@ since the real effect are so small and the code complexity is high (especially w
 writing a server that is cross platform) most implementations find that using a thread pool
 gives good enough performance.
 
-To sum i all up:
+To sum it all up:
 
 **Threadpool:**
 
@@ -102,7 +102,7 @@ To sum i all up:
 **Async file I/O:**
 
 - Increased code complexity
-- Poor and limited APIs (Linux and Macos has different limitations)
+- Poor and limited APIs (Linux and macOS has different limitations)
 - Weak platform support (does not work very well with a readiness based model)
 - Little to no real gain for most use cases
 

@@ -11,7 +11,9 @@ cargo new async-basics
 cd async-basics
 ```
 
-Now, as I've explained, we'll need to use the `minimio` library (which will be explained in a separate book, but you can already look through the source code if you want to):
+Now, as I've explained, we'll need to use the `minimio` library.
+
+> You can find a thorough explanation of minimio in the book: [Epoll, Kqueue and IOCP Explained with Rust](https://cfsamsonbooks.gitbook.io/epoll-kqueue-iocp-explained/). The [second part](https://cfsamsonbooks.gitbook.io/epoll-kqueue-iocp-explained/the-recipie-for-an-eventqueue) is all about minimio.
 
 In `Cargo.toml`
 

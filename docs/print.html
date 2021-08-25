@@ -283,7 +283,7 @@ reading the RFCs and discussions about Rust's async story:</p>
 <p><a href="https://cfsamson.github.io/book-exploring-async-basics/">The Node Experiment - Exploring Async Basics with Rust</a> (this book)</p>
 </li>
 <li>
-<p><a href="https://github.com/cfsamson/book-exploring-epoll-kqueue-iocp">Exploring Epoll, Kqueue and IOCP with Rust</a> a companion book to the &quot;Async Basics&quot; book</p>
+<p><a href="https://github.com/cfsamson/book-exploring-epoll-kqueue-iocp">Exploring Epoll, Kqueue and IOCP with Rust</a> a companion book to the &quot;Async Basics&quot; book where we create the &quot;minimio&quot; library we depend on in this book.</p>
 </li>
 <li>
 <p>Exploring Rust's Futures (TBD) - a different look on the <strong>why</strong> and <strong>how</strong> of Rust's futures</p>
@@ -1502,7 +1502,7 @@ refer you to and two talks for you that I find great (and correct) on this subje
 <h2><a class="header" href="#we-need-two-event-queues" id="we-need-two-event-queues">We need two event queues:</a></h2>
 <ol>
 <li>We need a thread pool to execute our CPU intensive tasks or tasks that we want
-too run asynchronously but not in our OS backed event queue</li>
+to run asynchronously but not in our OS backed event queue</li>
 <li>We need to make a simple cross platform <code>epoll/kqueue/IOCP</code> event loop. Now
 this turns out to be extremely interesting, but it's also a lot of code, so I split
 this section off into a separate &quot;companion book&quot; for those that want to explore this further.
@@ -1545,7 +1545,10 @@ and when. To help with that we define three extra methods:</p>
 <pre><code>cargo new async-basics
 cd async-basics
 </code></pre>
-<p>Now, as I've explained, we'll need to use the <code>minimio</code> library (which will be explained in a separate book, but you can already look through the source code if you want to):</p>
+<p>Now, as I've explained, we'll need to use the <code>minimio</code> library.</p>
+<blockquote>
+<p>You can find a thorough explanation of minimio in the book: <a href="https://cfsamsonbooks.gitbook.io/epoll-kqueue-iocp-explained/">Epoll, Kqueue and IOCP Explained with Rust</a>. The <a href="https://cfsamsonbooks.gitbook.io/epoll-kqueue-iocp-explained/the-recipie-for-an-eventqueue">second part</a> is all about minimio.</p>
+</blockquote>
 <p>In <code>Cargo.toml</code></p>
 <pre><code class="language-toml">[dependencies]
 minimio = {git = &quot;https://github.com/cfsamson/examples-minimio&quot;, branch = &quot;master&quot;}

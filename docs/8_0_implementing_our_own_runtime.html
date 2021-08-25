@@ -156,7 +156,10 @@
 <pre><code>cargo new async-basics
 cd async-basics
 </code></pre>
-<p>Now, as I've explained, we'll need to use the <code>minimio</code> library (which will be explained in a separate book, but you can already look through the source code if you want to):</p>
+<p>Now, as I've explained, we'll need to use the <code>minimio</code> library.</p>
+<blockquote>
+<p>You can find a thorough explanation of minimio in the book: <a href="https://cfsamsonbooks.gitbook.io/epoll-kqueue-iocp-explained/">Epoll, Kqueue and IOCP Explained with Rust</a>. The <a href="https://cfsamsonbooks.gitbook.io/epoll-kqueue-iocp-explained/the-recipie-for-an-eventqueue">second part</a> is all about minimio.</p>
+</blockquote>
 <p>In <code>Cargo.toml</code></p>
 <pre><code class="language-toml">[dependencies]
 minimio = {git = &quot;https://github.com/cfsamson/examples-minimio&quot;, branch = &quot;master&quot;}

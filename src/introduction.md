@@ -134,6 +134,6 @@ reading the RFCs and discussions about Rust's async story:
 
 - [The Node Experiment - Exploring Async Basics with Rust](https://cfsamson.github.io/book-exploring-async-basics/) (this book)
 
-- [Exploring Epoll, Kqueue and IOCP with Rust](https://github.com/cfsamson/book-exploring-epoll-kqueue-iocp) a companion book to the "Async Basics" book
+- [Exploring Epoll, Kqueue and IOCP with Rust](https://github.com/cfsamson/book-exploring-epoll-kqueue-iocp) a companion book to the "Async Basics" book where we create the "minimio" library we depend on in this book.
 
 - Exploring Rust's Futures (TBD) - a different look on the **why** and **how** of Rust's futures

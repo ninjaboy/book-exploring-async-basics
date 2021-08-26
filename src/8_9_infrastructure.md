@@ -4,7 +4,7 @@ Now, for everything to work we need some helpers to make our infrastructure work
 
 First of all, we need a way to get the `id` of an available thread.
 
-```rust, no_run
+```rust, ignore
    fn get_available_thread(&mut self) -> usize {
         match self.available_threads.pop() {
             Some(thread_id) => thread_id,
@@ -24,7 +24,7 @@ the repository and go ahead :)
 
 The next thing we need to do is to create an unique identity for our callbacks.
 
-```rust
+```rust, ignore
 /// If we hit max we just wrap around
 fn generate_identity(&mut self) -> usize {
     self.identity_token = self.identity_token.wrapping_add(1);
@@ -69,7 +69,7 @@ one.
 
 Next up is the method we use to add a callback to our `callback_queue`:
 
-```rust
+```rust, ignore
 /// Adds a callback to the queue and returns the key
 fn add_callback(&mut self, ident: usize, cb: impl FnOnce(Js) + 'static) {
     let boxed_cb = Box::new(cb);
@@ -114,7 +114,7 @@ know the size of so we store that reference in our `callback_queue` HashMap.
 Now that we got some closure basics out of the way we can move on. The next method
 is how we register `I/O` work. This is how we register an `epoll` event with our runtime:
 
-```rust
+```rust, ignore
 pub fn register_event_epoll(&mut self, token: usize, cb: impl FnOnce(Js) + 'static) {
     self.add_callback(token, cb);
 
@@ -137,7 +137,7 @@ We increase the counters on both `pending_events` and `epoll_pending_events`.
 
 Our next method registers work for the thread pool
 
-```rust
+```rust, ignore
 pub fn register_event_threadpool(
     &mut self,
     task: impl Fn() -> Js + Send + 'static,
@@ -200,7 +200,7 @@ push them directly to a thread in the order they come.
 
 The last part of the "infrastructure" is a function to set a timeout.
 
-```rust
+```rust, ignore
     fn set_timeout(&mut self, ms: u64, cb: impl Fn(Js) + 'static) {
         // Is it theoretically possible to get two equal instants? If so we'll have a bug...
         let now = Instant::now();

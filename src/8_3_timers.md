@@ -5,7 +5,7 @@
 The first step in the event loop is checking for expired timers, and we do this
 in the `self.check_expired_timers()` function
 
-```rust
+```rust, ignore
     fn process_expired_timers(&mut self) {
         // Need an intermediate variable to please the borrowchecker
         let timers_to_remove = &mut self.timers_to_remove;
@@ -51,7 +51,7 @@ remove the timers, that we're done with.
 
 The event loop will run repeatedly, so avoiding any allocations inside the loop is smart. There is no need to have this overhead.
 
-```rust
+```rust, ignore
 while let Some(key) = timers_to_remove.pop() {
     let callback_id = self.timers.remove(&key).unwrap();
     self.callbacks_to_run.push((callback_id, Js::Undefined));
@@ -68,7 +68,7 @@ Anyway, for now we add the callback id's to `self.callbacks_to_run`.
 Before we continue, let's recap by looking what members of the `Runtime` struct
 we used here:
 
-```rust, no_run
+```rust, ignore
 pub struct Runtime {
     pending_events: usize,
     callbacks_to_run: Vec<(usize, Js)>,

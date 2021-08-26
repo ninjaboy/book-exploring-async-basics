@@ -14,7 +14,7 @@ mostly for fun.
 
 **We want to write something like this:**
 
-```rust, no_run
+```rust, ignore
 /// Think of this function as the javascript program you have written
 fn javascript() {
     print("First call to read test.txt");
@@ -95,7 +95,7 @@ callback to be run when the event is ready.
 
 **An example of this is the `set_timeout` function:**
 
-```rust, no_run
+```rust, ignore
 set_timeout(0, |_res| {
     print("Immediate1 timed out");
 });

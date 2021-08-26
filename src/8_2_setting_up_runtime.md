@@ -12,7 +12,7 @@ Are you ready? Let's go!
 The first thing we do is to add a `new` method that returns an instance of our
 `Runtime`:
 
-```rust, no_run
+```rust, ignore
 impl Runtime {
     pub fn new() -> Self {
 ```
@@ -29,7 +29,7 @@ be cloned to each of our threads.
 Node defaults to 4 threads which we will copy. This is configurable in `Node`
 but we will take a shortcut and hard code it:
 
-```rust, no_run
+```rust, ignore
 let (event_sender, event_receiver) = channel::<PollEvent>();
 let mut threads = Vec::with_capacity(4);
 
@@ -75,7 +75,7 @@ Next up we create a new channel which we will use to send messages **to** our
 threads. Each thread keeps their `Receiver`, and we'll store the `Send` part
 in the struct `NodeThread` which will represent a thread in our threadpool.
 
-```rust, no_run
+```rust, ignore
 let (evt_sender, evt_receiver) = channel::<Task>();
 let event_sender = event_sender.clone();
 ```
@@ -87,7 +87,7 @@ of use `thread::spawn` since we want to give each thread a name. We'll only use 
 name when we `print` from our event since it will be clear from which thread
 we printed the message.
 
-```rust, no_run
+```rust, ignore
 let handle = thread::Builder::new()
         .name(format!("pool{}", i))
         .spawn(move || {
@@ -108,7 +108,7 @@ You'll also see here that we `spawn` our thread finally and create a closure.
 The body of our new threads are really simple, most of the lines are about printing
 out information for us to see:
 
-```rust, no_run
+```rust, ignore
 while let Ok(task) = evt_receiver.recv() {
         print(format!("received a task of type: {}", task.kind));
 
@@ -158,7 +158,7 @@ The code here is a bit more involved, but we'll take it step by step below.
 
 The code looks like this:
 
-```rust, no_run
+```rust, ignore
 let mut poll = minimio::Poll::new().expect("Error creating epoll queue");
 let registrator = poll.registrator();
 let epoll_timeout = Arc::new(Mutex::new(None));
@@ -202,7 +202,7 @@ let epoll_thread = thread::Builder::new()
 
 Lets start by initializing some variables:
 
-```rust, no_run
+```rust, ignore
 let mut poll = minimio::Poll::new().expect("Error creating epoll queue");
 let registrator = poll.registrator();
 let epoll_timeout = Arc::new(Mutex::new(None));
@@ -243,7 +243,7 @@ we can send this to our `epoll` thread.
 Next up is spawning our thread. We do this the exact same way as for the thread
 pool, but we name the thread `epoll`.
 
-```rust, no_run
+```rust, ignore
 let epoll_thread = thread::Builder::new()
     .name("epoll".to_string())
     .spawn(move || {
@@ -257,7 +257,7 @@ These objects contain information about the event that's occurred including a
 `token` we pass in when we register the event. This `token` identifies what event
 has occurred. In our case the token is a simple `usize`.
 
-```rust, no_run
+```rust, ignore
 let mut events = minimio::Events::with_capacity(1024);
 ```
 We allocate the buffer here since we only allocate this once when we do it here,
@@ -266,13 +266,13 @@ and we want to avoid allocating a new buffer on every turn of our `loop`.
 Basically, our `epoll` thread will run a loop which consciously polls for new
 events.
 
-```rust, no_run
+```rust, ignore
 loop {
 ```
 
 The interesting logic is inside the loop, and first we read the timeout value which
 should be synced with the next timeout that expires in our main loop.
-```rust, no_run
+```rust, ignore
 let epoll_timeout_handle = epoll_timeout_clone.lock().unwrap();
 let timeout = *epoll_timeout_handle;
 drop(epoll_timeout_handle);
@@ -305,7 +305,7 @@ as a timeout. A value of `None` will block indefinitely.
 > listens to events and wakes it up again when any of the events we have registered
 > interests to has happened.
 
-```rust, no_run
+```rust, ignore
 match poll.poll(&mut events, timeout) {
     Ok(v) if v > 0 => {
         for i in 0..v {
@@ -355,7 +355,7 @@ cases covered.
 Lastly we create a `Runtime` struct and store all the data we've intialized so
 far into it:
 
-```rust, no_run
+```rust, ignore
   Runtime {
     available_threads: (0..4).collect(),
     callbacks_to_run: vec![],
@@ -378,7 +378,7 @@ will just create a `Vec<usize>` with the values `[0, 1, 2, 3]`.
 
 In Rust, when we write...
 
-```rust
+```rust, ignore
 ...
 epoll_registrator: registrator,
 epoll_thread,
@@ -395,7 +395,7 @@ how long methods you should have but for our case I find it easier to write abou
 this if we don't need to jump between functions too much and can just cover all this
 logic from a-z:
 
-```rust
+```rust, ignore
 impl Runtime {
     pub fn new() -> Self {
         // ===== THE REGULAR THREADPOOL =====

@@ -1,42 +1,36 @@
 <!DOCTYPE HTML>
-<html lang="en" class="sidebar-visible no-js">
+<html lang="en" class="sidebar-visible no-js light">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
         <title>Concurrent vs Parallel - The Node Experiment - Exploring Async Basics with Rust</title>
-        
-
+        <!-- Custom HTML head -->
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
 
+        <link rel="icon" href="favicon.svg">
         <link rel="shortcut icon" href="favicon.png">
         <link rel="stylesheet" href="css/variables.css">
         <link rel="stylesheet" href="css/general.css">
         <link rel="stylesheet" href="css/chrome.css">
         <link rel="stylesheet" href="css/print.css" media="print">
-
         <!-- Fonts -->
         <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
-        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
-
+        <link rel="stylesheet" href="fonts/fonts.css">
         <!-- Highlight.js Stylesheets -->
         <link rel="stylesheet" href="highlight.css">
         <link rel="stylesheet" href="tomorrow-night.css">
         <link rel="stylesheet" href="ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
-        
-
-        
     </head>
-    <body class="light">
+    <body>
         <!-- Provide site root to javascript -->
         <script type="text/javascript">
             var path_to_root = "";
-            var default_theme = "light";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
         </script>
 
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
@@ -60,8 +54,11 @@
             var theme;
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
-            document.body.className = theme;
-            document.querySelector('html').className = theme + ' js';
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
         </script>
 
         <!-- Hide / unhide sidebar before it is displayed -->
@@ -78,7 +75,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="expanded affix "><a href="introduction.html">Introduction</a></li><li class="expanded "><a href="1_concurrent_vs_parallel.html" class="active"><strong aria-hidden="true">1.</strong> Concurrent vs Parallel</a></li><li class="expanded "><a href="2_async_history.html"><strong aria-hidden="true">2.</strong> Async history</a></li><li class="expanded "><a href="3_0_the_operating_system.html"><strong aria-hidden="true">3.</strong> The Operating System and CPU</a></li><li><ol class="section"><li class="expanded "><a href="3_1_communicating_with_the_os.html"><strong aria-hidden="true">3.1.</strong> Communicating with the OS</a></li><li class="expanded "><a href="3_2_cross_platform_abstractions.html"><strong aria-hidden="true">3.2.</strong> Writing Cross Platform Abstractions</a></li><li class="expanded "><a href="3_3_the_cpu_and_the_os.html"><strong aria-hidden="true">3.3.</strong> The CPU and the OS</a></li></ol></li><li class="expanded "><a href="4_interrupts_firmware_io.html"><strong aria-hidden="true">4.</strong> Interrupts, Firmware and I/O</a></li><li class="expanded "><a href="5_strategies_for_handling_io.html"><strong aria-hidden="true">5.</strong> Strategies for handling I/O</a></li><li class="expanded "><a href="6_epoll_kqueue_iocp.html"><strong aria-hidden="true">6.</strong> Epoll, Kqueue and IOCP</a></li><li class="expanded "><a href="7_0_introducing_our_main_example.html"><strong aria-hidden="true">7.</strong> Introducing our main example</a></li><li><ol class="section"><li class="expanded "><a href="7_1_what_is_node.html"><strong aria-hidden="true">7.1.</strong> What is Node?</a></li><li class="expanded "><a href="7_2_whats_our_plan.html"><strong aria-hidden="true">7.2.</strong> What's our plan</a></li></ol></li><li class="expanded "><a href="8_0_implementing_our_own_runtime.html"><strong aria-hidden="true">8.</strong> Implementing our own Runtime</a></li><li><ol class="section"><li class="expanded "><a href="8_1_the_main_loop.html"><strong aria-hidden="true">8.1.</strong> Running our runtime - the main loop</a></li><li class="expanded "><a href="8_2_setting_up_runtime.html"><strong aria-hidden="true">8.2.</strong> Setting up our runtime</a></li><li class="expanded "><a href="8_3_timers.html"><strong aria-hidden="true">8.3.</strong> Timers</a></li><li class="expanded "><a href="8_4_callbacks.html"><strong aria-hidden="true">8.4.</strong> Callbacks</a></li><li class="expanded "><a href="8_5_threadpool.html"><strong aria-hidden="true">8.5.</strong> Threadpool</a></li><li class="expanded "><a href="8_6_io_eventqueue.html"><strong aria-hidden="true">8.6.</strong> I/O eventqueue</a></li><li class="expanded "><a href="8_8_cleaning_up.html"><strong aria-hidden="true">8.7.</strong> Cleaning up</a></li><li class="expanded "><a href="8_9_infrastructure.html"><strong aria-hidden="true">8.8.</strong> Infrastructure</a></li></ol></li><li class="expanded "><a href="9_0_modules.html"><strong aria-hidden="true">9.</strong> Modules</a></li><li><ol class="section"><li class="expanded "><a href="9_1_file_module.html"><strong aria-hidden="true">9.1.</strong> File module</a></li><li class="expanded "><a href="9_2_crypto_module.html"><strong aria-hidden="true">9.2.</strong> Crypto module</a></li><li class="expanded "><a href="9_3_http_module.html"><strong aria-hidden="true">9.3.</strong> Http module</a></li></ol></li><li class="expanded "><a href="10_putting_pieces_together.html"><strong aria-hidden="true">10.</strong> Putting the pieces together</a></li><li class="expanded "><a href="11_final_code.html"><strong aria-hidden="true">11.</strong> Final code</a></li><li class="expanded "><a href="12_shortcuts_and_improvements.html"><strong aria-hidden="true">12.</strong> Shortcuts and improvements</a></li><li class="expanded affix "><a href="conclusion.html">Conclusion</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="1_concurrent_vs_parallel.html" class="active"><strong aria-hidden="true">1.</strong> Concurrent vs Parallel</a></li><li class="chapter-item expanded "><a href="2_async_history.html"><strong aria-hidden="true">2.</strong> Async history</a></li><li class="chapter-item expanded "><a href="3_0_the_operating_system.html"><strong aria-hidden="true">3.</strong> The Operating System and CPU</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="3_1_communicating_with_the_os.html"><strong aria-hidden="true">3.1.</strong> Communicating with the OS</a></li><li class="chapter-item expanded "><a href="3_2_cross_platform_abstractions.html"><strong aria-hidden="true">3.2.</strong> Writing Cross Platform Abstractions</a></li><li class="chapter-item expanded "><a href="3_3_the_cpu_and_the_os.html"><strong aria-hidden="true">3.3.</strong> The CPU and the OS</a></li></ol></li><li class="chapter-item expanded "><a href="4_interrupts_firmware_io.html"><strong aria-hidden="true">4.</strong> Interrupts, Firmware and I/O</a></li><li class="chapter-item expanded "><a href="5_strategies_for_handling_io.html"><strong aria-hidden="true">5.</strong> Strategies for handling I/O</a></li><li class="chapter-item expanded "><a href="6_epoll_kqueue_iocp.html"><strong aria-hidden="true">6.</strong> Epoll, Kqueue and IOCP</a></li><li class="chapter-item expanded "><a href="7_0_introducing_our_main_example.html"><strong aria-hidden="true">7.</strong> Introducing our main example</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="7_1_what_is_node.html"><strong aria-hidden="true">7.1.</strong> What is Node?</a></li><li class="chapter-item expanded "><a href="7_2_whats_our_plan.html"><strong aria-hidden="true">7.2.</strong> What's our plan</a></li></ol></li><li class="chapter-item expanded "><a href="8_0_implementing_our_own_runtime.html"><strong aria-hidden="true">8.</strong> Implementing our own Runtime</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="8_1_the_main_loop.html"><strong aria-hidden="true">8.1.</strong> Running our runtime - the main loop</a></li><li class="chapter-item expanded "><a href="8_2_setting_up_runtime.html"><strong aria-hidden="true">8.2.</strong> Setting up our runtime</a></li><li class="chapter-item expanded "><a href="8_3_timers.html"><strong aria-hidden="true">8.3.</strong> Timers</a></li><li class="chapter-item expanded "><a href="8_4_callbacks.html"><strong aria-hidden="true">8.4.</strong> Callbacks</a></li><li class="chapter-item expanded "><a href="8_5_threadpool.html"><strong aria-hidden="true">8.5.</strong> Threadpool</a></li><li class="chapter-item expanded "><a href="8_6_io_eventqueue.html"><strong aria-hidden="true">8.6.</strong> I/O eventqueue</a></li><li class="chapter-item expanded "><a href="8_8_cleaning_up.html"><strong aria-hidden="true">8.7.</strong> Cleaning up</a></li><li class="chapter-item expanded "><a href="8_9_infrastructure.html"><strong aria-hidden="true">8.8.</strong> Infrastructure</a></li></ol></li><li class="chapter-item expanded "><a href="9_0_modules.html"><strong aria-hidden="true">9.</strong> Modules</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="9_1_file_module.html"><strong aria-hidden="true">9.1.</strong> File module</a></li><li class="chapter-item expanded "><a href="9_2_crypto_module.html"><strong aria-hidden="true">9.2.</strong> Crypto module</a></li><li class="chapter-item expanded "><a href="9_3_http_module.html"><strong aria-hidden="true">9.3.</strong> Http module</a></li></ol></li><li class="chapter-item expanded "><a href="10_putting_pieces_together.html"><strong aria-hidden="true">10.</strong> Putting the pieces together</a></li><li class="chapter-item expanded "><a href="11_final_code.html"><strong aria-hidden="true">11.</strong> Final code</a></li><li class="chapter-item expanded "><a href="12_shortcuts_and_improvements.html"><strong aria-hidden="true">12.</strong> Shortcuts and improvements</a></li><li class="chapter-item expanded affix "><a href="conclusion.html">Conclusion</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -86,49 +83,42 @@
         <div id="page-wrapper" class="page-wrapper">
 
             <div class="page">
-                
-                <div id="menu-bar" class="menu-bar">
-                    <div id="menu-bar-sticky-container">
-                        <div class="left-buttons">
-                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
-                                <i class="fa fa-bars"></i>
-                            </button>
-                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
-                                <i class="fa fa-paint-brush"></i>
-                            </button>
-                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                                <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
-                            </ul>
-                            
-                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
-                                <i class="fa fa-search"></i>
-                            </button>
-                            
-                        </div>
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
 
-                        <h1 class="menu-title">The Node Experiment - Exploring Async Basics with Rust</h1>
+                    <h1 class="menu-title">The Node Experiment - Exploring Async Basics with Rust</h1>
 
-                        <div class="right-buttons">
-                            <a href="print.html" title="Print this book" aria-label="Print this book">
-                                <i id="print-button" class="fa fa-print"></i>
-                            </a>
-                            
-                            <a href="https://github.com/cfsamson/book-exploring-async-basics" title="Git repository" aria-label="Git repository">
-                                <i id="git-repository-button" class="fa fa-github"></i>
-                            </a>
-                            
-                        </div>
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/cfsamson/book-exploring-async-basics" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
                     </div>
                 </div>
 
-                
                 <div id="search-wrapper" class="hidden">
                     <form id="searchbar-outer" class="searchbar-outer">
-                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
                     </form>
                     <div id="searchresults-outer" class="searchresults-outer hidden">
                         <div id="searchresults-header" class="searchresults-header"></div>
@@ -136,8 +126,6 @@
                         </ul>
                     </div>
                 </div>
-                
-
                 <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
                 <script type="text/javascript">
                     document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
@@ -149,7 +137,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#whats-the-difference-between-concurrency-and-parallelism" id="whats-the-difference-between-concurrency-and-parallelism">What's the difference between concurrency and parallelism?</a></h1>
+                        <h1 id="whats-the-difference-between-concurrency-and-parallelism"><a class="header" href="#whats-the-difference-between-concurrency-and-parallelism">What's the difference between concurrency and parallelism?</a></h1>
 <p>Right off the bat, we'll dive into this subject by defining what concurrency is.
 Since it is quite easy to confuse &quot;concurrent&quot; with &quot;parallel&quot;, we will try to make
 a clear distinction between the two from the get-go.</p>
@@ -163,22 +151,22 @@ a clear distinction between the two from the get-go.</p>
 There are two ways to multitask. One is by <strong>progressing</strong> tasks concurrently,
 but not at the same time. Another is to progress tasks at the exact same time in parallel.</p>
 <p><img src="./images/definitions.jpg" alt="parallel vs concurrency" /></p>
-<h2><a class="header" href="#lets-start-off-with-some-definitions" id="lets-start-off-with-some-definitions">Lets start off with some definitions</a></h2>
-<h3><a class="header" href="#resource" id="resource">Resource</a></h3>
+<h2 id="lets-start-off-with-some-definitions"><a class="header" href="#lets-start-off-with-some-definitions">Lets start off with some definitions</a></h2>
+<h3 id="resource"><a class="header" href="#resource">Resource</a></h3>
 <p>Something we need to be able to progress a task. Our resources are limited. This
 could be CPU time or memory.</p>
-<h3><a class="header" href="#task" id="task">Task</a></h3>
+<h3 id="task"><a class="header" href="#task">Task</a></h3>
 <p>A set of operations that requires some kind of resource to progress. A task must
 consist of several sub-operations.</p>
-<h3><a class="header" href="#parallel" id="parallel">Parallel</a></h3>
+<h3 id="parallel"><a class="header" href="#parallel">Parallel</a></h3>
 <p>Something happening independently at the <strong>exact</strong> same time.</p>
-<h3><a class="header" href="#concurrent" id="concurrent">Concurrent</a></h3>
+<h3 id="concurrent"><a class="header" href="#concurrent">Concurrent</a></h3>
 <p>Tasks that are <strong><code>in progress</code></strong> at the same time, but not <em>necessarily</em> progressing
 simultaneously.</p>
 <p>This is an important distinction. If two tasks are running concurrently,
 but are not running in parallel, they must be able to stop and resume their progress.
 We say that a task is <code>interruptable</code> if it allows for this kind of concurrency.</p>
-<h2><a class="header" href="#the-mental-model-i-use" id="the-mental-model-i-use">The mental model I use.</a></h2>
+<h2 id="the-mental-model-i-use"><a class="header" href="#the-mental-model-i-use">The mental model I use.</a></h2>
 <p>I firmly believe the main reason we find parallel and concurrent programming hard to reason about stems from how we model events in our everyday life. We tend to define these terms loosely so our intuition is often wrong.</p>
 <blockquote>
 <p>It doesn't help that <strong>concurrent</strong> is defined in the dictionary as: <em>operating or occurring at the same time</em> which
@@ -189,12 +177,12 @@ doesn't really help us much when trying to describe how it differs from <strong>
 <blockquote>
 <p>Efficiency is the (often measurable) ability to avoid wasting materials, energy, efforts, money, and time in doing something or in producing a desired result.</p>
 </blockquote>
-<h3><a class="header" href="#parallelism" id="parallelism">Parallelism</a></h3>
+<h3 id="parallelism"><a class="header" href="#parallelism">Parallelism</a></h3>
 <p>Is increasing the resources we use to solve a task. It has nothing to do with <em>efficiency</em>.</p>
-<h3><a class="header" href="#concurrency" id="concurrency">Concurrency</a></h3>
+<h3 id="concurrency"><a class="header" href="#concurrency">Concurrency</a></h3>
 <p>Has everything to do with efficiency and resource utilization. Concurrency can never make <em>one single task go faster</em>.
 It can only help us utilize our resources better and thereby <em>finish a set of tasks faster</em>.</p>
-<h3><a class="header" href="#lets-draw-some-parallels-to-process-economics" id="lets-draw-some-parallels-to-process-economics">Let's draw some parallels to process economics</a></h3>
+<h3 id="lets-draw-some-parallels-to-process-economics"><a class="header" href="#lets-draw-some-parallels-to-process-economics">Let's draw some parallels to process economics</a></h3>
 <p>In businesses that manufacture goods, we often talk about LEAN processes. And this is pretty easy to compare with why programmers care so much about what we can achieve if we handle tasks concurrently.</p>
 <p>I'll let let this 3 minute video explain it for me:</p>
 <iframe width="560" height="315" src="https://www.youtube.com/embed/Oz8BR5Lflzg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
@@ -220,7 +208,7 @@ the CPU on the database server will be working on your request while you wait fo
 of parallelizing your work.</p>
 </blockquote>
 <p><strong>Concurrency is about working smarter. Parallelism is a way of throwing more resources at the problem.</strong></p>
-<h2><a class="header" href="#concurrency-and-its-relation-to-io" id="concurrency-and-its-relation-to-io">Concurrency and its relation to I/O</a></h2>
+<h2 id="concurrency-and-its-relation-to-io"><a class="header" href="#concurrency-and-its-relation-to-io">Concurrency and its relation to I/O</a></h2>
 <p>As you might understand from what I've written so far, writing async code mostly
 makes sense when you need to be smart to make optimal use of your resources.</p>
 <p>Now, if you write a program that is working hard to solve a problem, there often is no help
@@ -243,7 +231,7 @@ while performing other CPU intensive tasks?</p>
 <p>Well, you can stop whatever task you're doing every 16ms, and run the &quot;update UI&quot;
 task, and then resume whatever you were doing afterwards. This way, you will have
 to stop/resume your task 60 times a second, but you will also have a fully responsive UI which has roughly a 60 Hz refresh rate.</p>
-<h2><a class="header" href="#what-about-threads-provided-by-the-os" id="what-about-threads-provided-by-the-os">What about threads provided by the OS?</a></h2>
+<h2 id="what-about-threads-provided-by-the-os"><a class="header" href="#what-about-threads-provided-by-the-os">What about threads provided by the OS?</a></h2>
 <p>We'll cover threads a bit more when we talk about strategies for handling I/O, but I'll mention them here as well. One challenge when using OS threads to understand concurrency
 is that they appear to be mapped to cores. That's not necessarily a correct mental model
 to use even though most operating systems will try to map one thread to one
@@ -257,7 +245,7 @@ as well which means there will be many more threads than there are cores on the 
 be a means to achieve concurrency.</p>
 <p>This brings me over to the last part about concurrency. It needs to be defined
 in some sort of reference frame.</p>
-<h2><a class="header" href="#changing-the-reference-frame" id="changing-the-reference-frame">Changing the reference frame</a></h2>
+<h2 id="changing-the-reference-frame"><a class="header" href="#changing-the-reference-frame">Changing the reference frame</a></h2>
 <p>When you write code that is perfectly synchronous from your perspective, stop for a second and consider how that looks from the operating system perspective.</p>
 <p>The Operating System might not run your code from start to end at all. It might stop and resume your process many times. The CPU might get interrupted and handle some inputs while you think it's only focused on your task.</p>
 <p>So synchronous execution is only an illusion. But from the perspective of you as a programmer, it's not, and that is the important takeaway:</p>
@@ -270,42 +258,28 @@ without keeping this in the back of your head it will get confusing very fast.</
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                        
                             <a rel="prev" href="introduction.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
-                        
-
-                        
                             <a rel="next" href="2_async_history.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
-                        
-
                         <div style="clear: both"></div>
                     </nav>
                 </div>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                
-                    <a href="introduction.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="introduction.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
-                
-
-                
-                    <a href="2_async_history.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next" href="2_async_history.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
-                
             </nav>
 
         </div>
 
-        
-
-        
         <!-- Google Analytics Tag -->
         <script type="text/javascript">
             var localAddrs = ["localhost", "127.0.0.1", ""];
@@ -322,24 +296,16 @@ without keeping this in the back of your head it will get confusing very fast.</
                 ga('send', 'pageview');
             }
         </script>
-        
-
-        
-
-        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
         <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
-        
-
         <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
         <script src="book.js" type="text/javascript" charset="utf-8"></script>
 
         <!-- Custom JS scripts -->
-        
-
-        
-
     </body>
 </html>

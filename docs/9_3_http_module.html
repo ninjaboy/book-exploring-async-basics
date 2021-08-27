@@ -1,42 +1,36 @@
 <!DOCTYPE HTML>
-<html lang="en" class="sidebar-visible no-js">
+<html lang="en" class="sidebar-visible no-js light">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
         <title>Http module - The Node Experiment - Exploring Async Basics with Rust</title>
-        
-
+        <!-- Custom HTML head -->
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
 
+        <link rel="icon" href="favicon.svg">
         <link rel="shortcut icon" href="favicon.png">
         <link rel="stylesheet" href="css/variables.css">
         <link rel="stylesheet" href="css/general.css">
         <link rel="stylesheet" href="css/chrome.css">
         <link rel="stylesheet" href="css/print.css" media="print">
-
         <!-- Fonts -->
         <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
-        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
-
+        <link rel="stylesheet" href="fonts/fonts.css">
         <!-- Highlight.js Stylesheets -->
         <link rel="stylesheet" href="highlight.css">
         <link rel="stylesheet" href="tomorrow-night.css">
         <link rel="stylesheet" href="ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
-        
-
-        
     </head>
-    <body class="light">
+    <body>
         <!-- Provide site root to javascript -->
         <script type="text/javascript">
             var path_to_root = "";
-            var default_theme = "light";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
         </script>
 
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
@@ -60,8 +54,11 @@
             var theme;
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
-            document.body.className = theme;
-            document.querySelector('html').className = theme + ' js';
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
         </script>
 
         <!-- Hide / unhide sidebar before it is displayed -->
@@ -78,7 +75,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="expanded affix "><a href="introduction.html">Introduction</a></li><li class="expanded "><a href="1_concurrent_vs_parallel.html"><strong aria-hidden="true">1.</strong> Concurrent vs Parallel</a></li><li class="expanded "><a href="2_async_history.html"><strong aria-hidden="true">2.</strong> Async history</a></li><li class="expanded "><a href="3_0_the_operating_system.html"><strong aria-hidden="true">3.</strong> The Operating System and CPU</a></li><li><ol class="section"><li class="expanded "><a href="3_1_communicating_with_the_os.html"><strong aria-hidden="true">3.1.</strong> Communicating with the OS</a></li><li class="expanded "><a href="3_2_cross_platform_abstractions.html"><strong aria-hidden="true">3.2.</strong> Writing Cross Platform Abstractions</a></li><li class="expanded "><a href="3_3_the_cpu_and_the_os.html"><strong aria-hidden="true">3.3.</strong> The CPU and the OS</a></li></ol></li><li class="expanded "><a href="4_interrupts_firmware_io.html"><strong aria-hidden="true">4.</strong> Interrupts, Firmware and I/O</a></li><li class="expanded "><a href="5_strategies_for_handling_io.html"><strong aria-hidden="true">5.</strong> Strategies for handling I/O</a></li><li class="expanded "><a href="6_epoll_kqueue_iocp.html"><strong aria-hidden="true">6.</strong> Epoll, Kqueue and IOCP</a></li><li class="expanded "><a href="7_0_introducing_our_main_example.html"><strong aria-hidden="true">7.</strong> Introducing our main example</a></li><li><ol class="section"><li class="expanded "><a href="7_1_what_is_node.html"><strong aria-hidden="true">7.1.</strong> What is Node?</a></li><li class="expanded "><a href="7_2_whats_our_plan.html"><strong aria-hidden="true">7.2.</strong> What's our plan</a></li></ol></li><li class="expanded "><a href="8_0_implementing_our_own_runtime.html"><strong aria-hidden="true">8.</strong> Implementing our own Runtime</a></li><li><ol class="section"><li class="expanded "><a href="8_1_the_main_loop.html"><strong aria-hidden="true">8.1.</strong> Running our runtime - the main loop</a></li><li class="expanded "><a href="8_2_setting_up_runtime.html"><strong aria-hidden="true">8.2.</strong> Setting up our runtime</a></li><li class="expanded "><a href="8_3_timers.html"><strong aria-hidden="true">8.3.</strong> Timers</a></li><li class="expanded "><a href="8_4_callbacks.html"><strong aria-hidden="true">8.4.</strong> Callbacks</a></li><li class="expanded "><a href="8_5_threadpool.html"><strong aria-hidden="true">8.5.</strong> Threadpool</a></li><li class="expanded "><a href="8_6_io_eventqueue.html"><strong aria-hidden="true">8.6.</strong> I/O eventqueue</a></li><li class="expanded "><a href="8_8_cleaning_up.html"><strong aria-hidden="true">8.7.</strong> Cleaning up</a></li><li class="expanded "><a href="8_9_infrastructure.html"><strong aria-hidden="true">8.8.</strong> Infrastructure</a></li></ol></li><li class="expanded "><a href="9_0_modules.html"><strong aria-hidden="true">9.</strong> Modules</a></li><li><ol class="section"><li class="expanded "><a href="9_1_file_module.html"><strong aria-hidden="true">9.1.</strong> File module</a></li><li class="expanded "><a href="9_2_crypto_module.html"><strong aria-hidden="true">9.2.</strong> Crypto module</a></li><li class="expanded "><a href="9_3_http_module.html" class="active"><strong aria-hidden="true">9.3.</strong> Http module</a></li></ol></li><li class="expanded "><a href="10_putting_pieces_together.html"><strong aria-hidden="true">10.</strong> Putting the pieces together</a></li><li class="expanded "><a href="11_final_code.html"><strong aria-hidden="true">11.</strong> Final code</a></li><li class="expanded "><a href="12_shortcuts_and_improvements.html"><strong aria-hidden="true">12.</strong> Shortcuts and improvements</a></li><li class="expanded affix "><a href="conclusion.html">Conclusion</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="1_concurrent_vs_parallel.html"><strong aria-hidden="true">1.</strong> Concurrent vs Parallel</a></li><li class="chapter-item expanded "><a href="2_async_history.html"><strong aria-hidden="true">2.</strong> Async history</a></li><li class="chapter-item expanded "><a href="3_0_the_operating_system.html"><strong aria-hidden="true">3.</strong> The Operating System and CPU</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="3_1_communicating_with_the_os.html"><strong aria-hidden="true">3.1.</strong> Communicating with the OS</a></li><li class="chapter-item expanded "><a href="3_2_cross_platform_abstractions.html"><strong aria-hidden="true">3.2.</strong> Writing Cross Platform Abstractions</a></li><li class="chapter-item expanded "><a href="3_3_the_cpu_and_the_os.html"><strong aria-hidden="true">3.3.</strong> The CPU and the OS</a></li></ol></li><li class="chapter-item expanded "><a href="4_interrupts_firmware_io.html"><strong aria-hidden="true">4.</strong> Interrupts, Firmware and I/O</a></li><li class="chapter-item expanded "><a href="5_strategies_for_handling_io.html"><strong aria-hidden="true">5.</strong> Strategies for handling I/O</a></li><li class="chapter-item expanded "><a href="6_epoll_kqueue_iocp.html"><strong aria-hidden="true">6.</strong> Epoll, Kqueue and IOCP</a></li><li class="chapter-item expanded "><a href="7_0_introducing_our_main_example.html"><strong aria-hidden="true">7.</strong> Introducing our main example</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="7_1_what_is_node.html"><strong aria-hidden="true">7.1.</strong> What is Node?</a></li><li class="chapter-item expanded "><a href="7_2_whats_our_plan.html"><strong aria-hidden="true">7.2.</strong> What's our plan</a></li></ol></li><li class="chapter-item expanded "><a href="8_0_implementing_our_own_runtime.html"><strong aria-hidden="true">8.</strong> Implementing our own Runtime</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="8_1_the_main_loop.html"><strong aria-hidden="true">8.1.</strong> Running our runtime - the main loop</a></li><li class="chapter-item expanded "><a href="8_2_setting_up_runtime.html"><strong aria-hidden="true">8.2.</strong> Setting up our runtime</a></li><li class="chapter-item expanded "><a href="8_3_timers.html"><strong aria-hidden="true">8.3.</strong> Timers</a></li><li class="chapter-item expanded "><a href="8_4_callbacks.html"><strong aria-hidden="true">8.4.</strong> Callbacks</a></li><li class="chapter-item expanded "><a href="8_5_threadpool.html"><strong aria-hidden="true">8.5.</strong> Threadpool</a></li><li class="chapter-item expanded "><a href="8_6_io_eventqueue.html"><strong aria-hidden="true">8.6.</strong> I/O eventqueue</a></li><li class="chapter-item expanded "><a href="8_8_cleaning_up.html"><strong aria-hidden="true">8.7.</strong> Cleaning up</a></li><li class="chapter-item expanded "><a href="8_9_infrastructure.html"><strong aria-hidden="true">8.8.</strong> Infrastructure</a></li></ol></li><li class="chapter-item expanded "><a href="9_0_modules.html"><strong aria-hidden="true">9.</strong> Modules</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="9_1_file_module.html"><strong aria-hidden="true">9.1.</strong> File module</a></li><li class="chapter-item expanded "><a href="9_2_crypto_module.html"><strong aria-hidden="true">9.2.</strong> Crypto module</a></li><li class="chapter-item expanded "><a href="9_3_http_module.html" class="active"><strong aria-hidden="true">9.3.</strong> Http module</a></li></ol></li><li class="chapter-item expanded "><a href="10_putting_pieces_together.html"><strong aria-hidden="true">10.</strong> Putting the pieces together</a></li><li class="chapter-item expanded "><a href="11_final_code.html"><strong aria-hidden="true">11.</strong> Final code</a></li><li class="chapter-item expanded "><a href="12_shortcuts_and_improvements.html"><strong aria-hidden="true">12.</strong> Shortcuts and improvements</a></li><li class="chapter-item expanded affix "><a href="conclusion.html">Conclusion</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -86,49 +83,42 @@
         <div id="page-wrapper" class="page-wrapper">
 
             <div class="page">
-                
-                <div id="menu-bar" class="menu-bar">
-                    <div id="menu-bar-sticky-container">
-                        <div class="left-buttons">
-                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
-                                <i class="fa fa-bars"></i>
-                            </button>
-                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
-                                <i class="fa fa-paint-brush"></i>
-                            </button>
-                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                                <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
-                            </ul>
-                            
-                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
-                                <i class="fa fa-search"></i>
-                            </button>
-                            
-                        </div>
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
 
-                        <h1 class="menu-title">The Node Experiment - Exploring Async Basics with Rust</h1>
+                    <h1 class="menu-title">The Node Experiment - Exploring Async Basics with Rust</h1>
 
-                        <div class="right-buttons">
-                            <a href="print.html" title="Print this book" aria-label="Print this book">
-                                <i id="print-button" class="fa fa-print"></i>
-                            </a>
-                            
-                            <a href="https://github.com/cfsamson/book-exploring-async-basics" title="Git repository" aria-label="Git repository">
-                                <i id="git-repository-button" class="fa fa-github"></i>
-                            </a>
-                            
-                        </div>
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/cfsamson/book-exploring-async-basics" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
                     </div>
                 </div>
 
-                
                 <div id="search-wrapper" class="hidden">
                     <form id="searchbar-outer" class="searchbar-outer">
-                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
                     </form>
                     <div id="searchresults-outer" class="searchresults-outer hidden">
                         <div id="searchresults-header" class="searchresults-header"></div>
@@ -136,8 +126,6 @@
                         </ul>
                     </div>
                 </div>
-                
-
                 <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
                 <script type="text/javascript">
                     document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
@@ -149,7 +137,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#http-module" id="http-module">Http module</a></h1>
+                        <h1 id="http-module"><a class="header" href="#http-module">Http module</a></h1>
 <p>The <code>Http</code> module is probably the one I personally find interesting. There is
 two reasons for this:</p>
 <ol>
@@ -157,10 +145,7 @@ two reasons for this:</p>
 <li>The method <code>epoll_registrator.register()</code> is the result of a huge amount of research and work to get working. Look forward to the next book where we dive into that.</li>
 </ol>
 <p>Let's look at the code first and then step through it:</p>
-<pre><pre class="playpen"><code class="language-rust no_run">
-<span class="boring">#![allow(unused_variables)]
-</span><span class="boring">fn main() {
-</span>struct Http;
+<pre><code class="language-rust  ignore">struct Http;
 impl Http {
     pub fn http_get_slow(url: &amp;str, delay_ms: u32, cb: impl Fn(Js) + 'static + Clone) {
         let rt: &amp;mut Runtime = unsafe { &amp;mut *RUNTIME };
@@ -198,19 +183,14 @@ impl Http {
         rt.register_event_epoll(token, wrapped);
     }
 }
-<span class="boring">}
-</span></code></pre></pre>
+</code></pre>
 <p>First we call the method <code>http_get_slow</code> since we're simulating a slow response, again
 this is for us to see and control how the events will occur since we're trying to learn.</p>
 <p>In the function body, the first thing we do is dereference our runtime. We need to use a bit of its functionality here so we do this right away.</p>
 <p>The next step is to create a <code>minimio::TcpStream</code>.</p>
-<pre><pre class="playpen"><code class="language-rust no_run">
-<span class="boring">#![allow(unused_variables)]
-</span><span class="boring">fn main() {
-</span>let adr = &quot;slowwly.robertomurray.co.uk:80&quot;;
+<pre><code class="language-rust  ignore">let adr = &quot;slowwly.robertomurray.co.uk:80&quot;;
 let mut stream = minimio::TcpStream::connect(adr).unwrap();
-<span class="boring">}
-</span></code></pre></pre>
+</code></pre>
 <blockquote>
 <p><strong>Now why not the regular <code>TcpStream</code> from the standard library?</strong></p>
 <p>Well, you do remember that <code>kqueue</code> and <code>epoll</code> are readiness based and <code>IOCP</code> is
@@ -224,18 +204,14 @@ to simulate slow responses. He's kind enough to let us all use it. We can choose
 each request.</p>
 <p>Next we construct a http <code>GET</code> request. The line breaks, and spacing is important here
 as is the two blank lines at the bottom.</p>
-<pre><pre class="playpen"><code class="language-rust no_run">
-<span class="boring">#![allow(unused_variables)]
-</span><span class="boring">fn main() {
-</span>let request = format!(
+<pre><code class="language-rust  ignore">let request = format!(
             &quot;GET /delay/{}/url/http://{} HTTP/1.1\r\n\
              Host: slowwly.robertomurray.co.uk\r\n\
              Connection: close\r\n\
              \r\n&quot;,
             delay_ms, url
         );
-<span class="boring">}
-</span></code></pre></pre>
+</code></pre>
 <p>You might wonder why we use <code>\r\n\</code> as line breaks here instead of the standard <code>\n</code>?</p>
 <p>This is because a http <code>GET</code> request expects <code>CRLF</code> and not just <code>LF</code>, using only <code>\n</code> will
 not result in a valid <code>GET</code> request.</p>
@@ -244,14 +220,10 @@ want to be redirected to.</p>
 <p>Next we write this request to our <code>TcpStream</code>. In a real implementation this would
 have been done by issuing the write in an async manner and then register an event
 when the write has happened.</p>
-<pre><pre class="playpen"><code class="language-rust no_run">
-<span class="boring">#![allow(unused_variables)]
-</span><span class="boring">fn main() {
-</span>stream
+<pre><code class="language-rust  ignore">stream
     .write_all(request.as_bytes())
     .expect(&quot;Error writing to stream&quot;);
-<span class="boring">}
-</span></code></pre></pre>
+</code></pre>
 <blockquote>
 <p>We write it blocking here since by implementing both <code>read</code> and <code>write</code> we'll have
 to create much more code, and the <strong>understanding</strong> of how this works will not really
@@ -262,24 +234,16 @@ beyond our scope today)</p>
 <p>First we need to generate a <code>token</code>. This token will follow our <code>event</code> and be passed
 on to the OS. When the OS returns it also returns this token so we know what event
 occurred.</p>
-<pre><pre class="playpen"><code class="language-rust no_run">
-<span class="boring">#![allow(unused_variables)]
-</span><span class="boring">fn main() {
-</span>let token = rt.generate_cb_identity();
-<span class="boring">}
-</span></code></pre></pre>
+<pre><code class="language-rust  ignore">let token = rt.generate_cb_identity();
+</code></pre>
 <p>For convenience we use the same token as our <code>callback_id</code> since it will be unique, and
 events &lt;-&gt; callbacks will map 1:1 the way we have designed this.</p>
 <p>Our next call actually issues a syscall to the underlying OS and registers our
 interest in an event of type <code>Readable</code>.</p>
-<pre><pre class="playpen"><code class="language-rust no_run">
-<span class="boring">#![allow(unused_variables)]
-</span><span class="boring">fn main() {
-</span>rt.epoll_registrator
+<pre><code class="language-rust  ignore">rt.epoll_registrator
             .register(&amp;mut stream, token, minimio::Interests::readable())
             .unwrap();
-<span class="boring">}
-</span></code></pre></pre>
+</code></pre>
 <p>The reason we need <code>&amp;mut stream</code> here is Windows and <code>IOCP</code>. Our stream holds a
 buffer that we'll pass on to Windows. <strong>This buffer must not be touched</strong> while
 the OS lends it exclusively. This way we leverage Rusts borrowchecker to help us
@@ -293,10 +257,7 @@ both books I had to stop somewhere and this is not the worlds end.</p>
 <p>The main point here is that we register an interest to read in a non-blocking manner.</p>
 <p>I'll repeat this part of the code so you have it right in front of you while i
 explain:</p>
-<pre><pre class="playpen"><code class="language-rust no_run">
-<span class="boring">#![allow(unused_variables)]
-</span><span class="boring">fn main() {
-</span>    let wrapped = move |_n| {
+<pre><code class="language-rust  ignore">    let wrapped = move |_n| {
             let mut stream = stream;
             let mut buffer = String::new();
             stream
@@ -304,19 +265,14 @@ explain:</p>
                 .expect(&quot;Stream read error&quot;);
             cb(Js::String(buffer));
         };
-<span class="boring">}
-</span></code></pre></pre>
+</code></pre>
 <p>Since our callback expects a <code>Js::String</code> we can't actually pass the buffer. We need
 to wrap our callback so we first read out the data to a <code>String</code> which we then
 can pass to our code.</p>
 <p>Lastly we register the I/O event with our runtime</p>
-<pre><pre class="playpen"><code class="language-rust">
-<span class="boring">#![allow(unused_variables)]
-</span><span class="boring">fn main() {
-</span>rt.register_event_epoll(token, wrapped);
-<span class="boring">}
-</span></code></pre></pre>
-<h2><a class="header" href="#bonus-section" id="bonus-section">Bonus section</a></h2>
+<pre><code class="language-rust  ignore">rt.register_event_epoll(token, wrapped);
+</code></pre>
+<h2 id="bonus-section"><a class="header" href="#bonus-section">Bonus section</a></h2>
 <p>Now in a better implementation, we would not issue a blocking call like <code>read_to_string</code>
 because it might be that at some point this will block if not all the data we need
 is present at once.</p>
@@ -351,42 +307,28 @@ need a few more small things to get it all up and running.</p>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                        
                             <a rel="prev" href="9_2_crypto_module.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
-                        
-
-                        
                             <a rel="next" href="10_putting_pieces_together.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
-                        
-
                         <div style="clear: both"></div>
                     </nav>
                 </div>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                
-                    <a href="9_2_crypto_module.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="9_2_crypto_module.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
-                
-
-                
-                    <a href="10_putting_pieces_together.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next" href="10_putting_pieces_together.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
-                
             </nav>
 
         </div>
 
-        
-
-        
         <!-- Google Analytics Tag -->
         <script type="text/javascript">
             var localAddrs = ["localhost", "127.0.0.1", ""];
@@ -403,24 +345,16 @@ need a few more small things to get it all up and running.</p>
                 ga('send', 'pageview');
             }
         </script>
-        
-
-        
-
-        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
         <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
-        
-
         <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
         <script src="book.js" type="text/javascript" charset="utf-8"></script>
 
         <!-- Custom JS scripts -->
-        
-
-        
-
     </body>
 </html>

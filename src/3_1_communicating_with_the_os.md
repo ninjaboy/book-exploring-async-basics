@@ -81,7 +81,7 @@ Secondly, we pass in the address of our string buffer and the length of the buff
 **On macOS, the syscall will look something like this:** \
 (since the Rust playground is running Linux, we can't run this example here)
 
-```rust, no_run
+```rust, ignore
 #![feature(llvm_asm)]
 fn main() {
     let message = String::from("Hello world from interrupt!\n");
@@ -165,13 +165,13 @@ fn syscall(message: String) -> io::Result<()> {
 
 I'll explain what we just did here. I assume that the `main` method needs no comment.
 
-```rust, no_run
+```rust, ignore
 #[link(name = "c")]
 ```
 
 Every Linux installation comes with a version of `libc` which is a C-library for communicating with the operating system. Having a `libc` with a consistent API means they can change the underlying implementation without breaking everyone's code. This flag tells the compiler to link to the "c" library on the system we're compiling for.
 
-```rust, no_run
+```rust, ignore
 extern "C" {
     fn write(fd: u32, buf: *const u8, count: usize);
 }
@@ -186,7 +186,7 @@ you're linking to.
 The write function takes a `file descriptor` which in this case is a handle to
 `stdout`. In addition, it expects us to provide a pointer to an array of `u8` values and the length of the buffer.
 
-```rust, no_run
+```rust, ignore
 #[cfg(not(target_os = "windows"))]
 fn syscall_libc(message: String) {
     let msg_ptr = message.as_ptr();
@@ -214,7 +214,7 @@ here.
 
 **This syscall will look like this on Windows:** \
 (You'll need to copy this code over to a Windows machine to try this out)
-```rust, no_run
+```rust, ignore
 use std::io;
 
 fn main() {
@@ -267,7 +267,7 @@ Now, just by looking at the code above you see it starts to get a bit more
 complex, but let's spend some time to go through line by line what we do here as
 well.
 
-```text
+```rust, ignore
 #[cfg(target_os = "windows")]
 #[link(name = "kernel32")]
 ```
@@ -276,7 +276,7 @@ The first line is just telling the compiler to only compile this if the `target_
 
 The second line is a linker directive, telling the linker we want to link to the library `kernel32` (if you ever see an example that links to `user32` that will also work).
 
-```rust, no_run
+```rust, ignore
 extern "stdcall" {
     /// https://docs.microsoft.com/en-us/windows/console/getstdhandle
     fn GetStdHandle(nStdHandle: i32) -> i32;
@@ -303,7 +303,7 @@ Now, ANSI encoded text works fine if you only write English text, but as soon as
 
 That's why we'll convert our `utf-8` encoded text to `utf-16` encoded Unicode codepoints that can represent these characters and use the `WriteConsoleW` function.
 
-```rust, no_run, noplaypen
+```rust, ignore
 #[cfg(target_os = "windows")]
 fn syscall(message: String) -> io::Result<()> {
 
@@ -333,7 +333,7 @@ fn syscall(message: String) -> io::Result<()> {
 The first thing we do is to convert the text to utf-16 encoded text which
 Windows uses. Fortunately, Rust has a built-in function to convert our `utf-8` encoded text to `utf-16` code points. `encode_utf16` returns an iterator over  `u16` code points that we can collect to a `Vec`.
 
-```rust, no_run, noplaypen
+```rust, ignore
 let msg: Vec<u16> = message.encode_utf16().collect();
 let msg_ptr = msg.as_ptr();
 let len = msg.len() as u32;
@@ -342,11 +342,11 @@ let len = msg.len() as u32;
 Next, we get the pointer to the underlying buffer of our `Vec` and get the
 length.
 
-```rust, no_run, noplaypen
+```rust, ignore
 let handle = unsafe { GetStdHandle(-11) };
-   if handle  == -1 {
-       return Err(io::Error::last_os_error())
-   }
+if handle  == -1 {
+    return Err(io::Error::last_os_error())
+}
 ```
 
 The next is a call to `GetStdHandle`. We pass in the value `-11`. The values we
@@ -364,12 +364,12 @@ together with the documentation for the function we call, but it's very convenie
 
 The return codes to expect is also documented thoroughly for all functions so we handle potential errors here in the same way as we did for the Linux/macOS syscalls.
 
-```rust, no_run
+```rust, ignore
 let res = unsafe {
     WriteConsoleW(handle, msg_ptr, len, &mut output, std::ptr::null())
-    };
+};
 
-if res  == 0 {
+if res == 0 {
     return Err(io::Error::last_os_error());
 }
 ```

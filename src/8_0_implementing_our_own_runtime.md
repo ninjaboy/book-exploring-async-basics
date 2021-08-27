@@ -40,7 +40,7 @@ First navigate to `main.rs` (located in `src/main.rs`).
 
 I've added comments to the code so it's easier to remember and understand.
 
-```rust, no_run
+```rust, ignore
 pub struct Runtime {
     /// Available threads for the threadpool
     available_threads: Vec<usize>,
@@ -80,7 +80,7 @@ I'll continue by defining some of the types we use here.
 
 ## Task
 
-```rust, no_run
+```rust, ignore
 struct Task {
     task: Box<dyn Fn() -> Js + Send + 'static>,
     callback_id: usize,
@@ -114,7 +114,7 @@ First is `NodeThread`, which represents a thread in our thread pool. As you
 see we have a `JoinHandle` (which we get when we call `thread::spawn`) and the
 sending part of a channel. This channel, sends messages of the type `Task`.
 
-```rust, no_run
+```rust, ignore
 #[derive(Debug)]
 struct NodeThread {
     pub(crate) handle: JoinHandle<()>,
@@ -130,7 +130,7 @@ In our example, we have three kinds of events: a `FileRead` which is a file that
 
 As you might understand, this object is only used in the `threadpool`.
 
-```rust,no_run
+```rust, ignore
 pub enum ThreadPoolTaskKind {
     FileRead,
     Encrypt,
@@ -151,7 +151,7 @@ We know the return types already based on our modules
 documentation - just like you would know it from the documentation when using a
 Node module but we need to actually handle the types in Rust so this will make that just slightly easier for us.
 
-```rust,no_run
+```rust, ignore
 #[derive(Debug)]
 pub enum Js {
     Undefined,
@@ -184,7 +184,7 @@ Next we have the `PollEvent`. While we defined an `enum` to represent what
 kind of events we could send **to** the `eventpool`, we define some events
 that we can accept back from both our `epoll based` event queue and our `threadpool`.
 
-```rust,no_run
+```rust, ignore
 /// Describes the three main events our epoll-eventloop handles
 enum PollEvent {
     /// An event from the `threadpool` with a tuple containing the `thread id`,
@@ -213,7 +213,7 @@ be fine since it contains no "magic" that we want to explain in this book) but
 it also does make our code less readable, and it's complex enough.
 
 
-```rust, no_run
+```rust, ignore
 static mut RUNTIME: *mut Runtime = std::ptr::null_mut();
 ```
 

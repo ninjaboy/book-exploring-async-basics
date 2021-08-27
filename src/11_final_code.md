@@ -23,7 +23,7 @@ the logic yourself now to do something else.
 
 In `main.rs` you can paste in this code:
 
-```rust
+```rust, ignore
 /// Think of this function as the javascript program you have written
 fn javascript() {
     print("First call to read test.txt");

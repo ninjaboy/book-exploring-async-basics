@@ -23,7 +23,7 @@ processes), was accomplished by what we call `non-preemptive multitasking`.
 
 This kind of multitasking put the responsibility of letting the OS run other tasks like responding to input from the mouse, or running a background task in the hands of the programmer.
 
-Typically the programmer `yielded` control to the OS.
+Typically, the programmer `yielded` control to the OS.
 
 Besides off-loading a huge responsibility to every programmer writing a program
 for your platform, this was naturally error-prone. A small mistake in a programs code
@@ -53,25 +53,25 @@ This is now the prevailing way to design an operating system.
 
 > If you want to learn more about this kind of threaded multitasking I recommend reading my previous book about [green threads](https://cfsamson.gitbook.io/green-threads-explained-in-200-lines-of-rust/). This is a nice introduction where you'll be able to get the basic knowledge you need about threads, contexts, stacks and scheduling.
 
-## Hyperthreading
+## Hyper-threading
 
-As CPUs evolved and added more functionality, such as several ALUs (Arithmetic Logic Units), and additional logic units, the CPU manufacturers realized that the entire CPU was never utilized fully. For example, when an operation only required some parts of the CPU, an instruction could be run on the ALU simultaneously. This became the start of Hyperthreading.
+As CPUs evolved and added more functionality, such as several ALUs (Arithmetic Logic Units), and additional logic units, the CPU manufacturers realized that the entire CPU was never utilized fully. For example, when an operation only required some parts of the CPU, an instruction could be run on the ALU simultaneously. This became the start of hyper-threading.
 
 You see, on your computer today that it has i.e. 6 cores, and 12 logical cores.
-This is exactly where Hyperthreading comes in. It "simulates" two cores on the
+This is exactly where hyper-threading comes in. It "simulates" two cores on the
 same core by using unused parts of the CPU to drive progress on thread "2"
 simultaneously as it's running the code on thread "1". It does this by using a
 number of smart tricks (like the one with the ALU).
 
-Now, having hyperthreading, we could actually offload some work on one thread while keeping the UI
+Now, having hyper-threading, we could actually offload some work on one thread while keeping the UI
 interactive by responding to events in the second thread even though we only
 had one CPU core thereby utilizing our hardware better.
 
 > You might wonder about the performance of Hyper Threading?
 >
-> It turns out that Hyperthreading has been continuously improved since the '90s.
+> It turns out that hyper-threading has been continuously improved since the '90s.
 > Since you're not actually running two CPU's there will be some operations that
-> need to wait for each other to finish. The performance gain of hyperthreading
+> need to wait for each other to finish. The performance gain of hyper-threading
 > compared to multithreading in a single core seems to be [somewhere close
 > to 30 %](https://en.wikipedia.org/wiki/Hyper-threading#Performance_claims) but
 > it largely depends on the workload.
@@ -84,7 +84,7 @@ and working on the processing pipelines of the processors, but the gains seems t
 be diminishing.
 
 On the other hand, new processors are so small they allow us to have many on the
-same chip instead. Now, most CPUs have many cores, and most often each core will also have the ability to perform hyperthreading.
+same chip instead. Now, most CPUs have many cores, and most often each core will also have the ability to perform hyper-threading.
 
 ## So how synchronous is the code you write, really?
 

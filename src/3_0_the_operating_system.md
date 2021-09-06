@@ -12,7 +12,7 @@ This ties into what I talked about in the first chapter when I said that `concur
 needs to be talked about within a reference frame and I explained that the OS
 might stop and start your process at any time.
 
-What we call synchronous code is in most cases code that appears as synchronous to us as programmers. Neither the OS or the CPU live in a fully synchronous world.
+What we call synchronous code is in most cases code that appears as synchronous to us as programmers. Neither the OS nor the CPU live in a fully synchronous world.
 
 Operating systems use `preemptive multitasking` and as long as the operating system you're running is preemptively scheduling processes, you won't have a
 guarantee that your code runs instruction by instruction without interruption.
@@ -39,4 +39,3 @@ access to the hardware directly.
 However, this also means that to understand everything from the ground up, you'll also need to know how your operating system handles these tasks.
 
 To be able to work with the operating system, we'll need to know how we can communicate with it and that's exactly what we're going to go through next.
-

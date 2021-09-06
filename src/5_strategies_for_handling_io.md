@@ -1,6 +1,6 @@
 # Strategies for handling I/O
 
-Before we dive into Writing some code we'll finish off this part of the book talking a bit about different strategies of handling I/O and concurrency. Now, just note that I'm covering I/O in general here, but I use network communication as the main example. Different strategies can have different strengths depending on what type of I/O we're talking about.
+Before we dive into writing some code we'll finish off this part of the book talking a bit about different strategies of handling I/O and concurrency. Now, just note that I'm covering I/O in general here, but I use network communication as the main example. Different strategies can have different strengths depending on what type of I/O we're talking about.
 
 ## 1. Using OS threads
 

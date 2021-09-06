@@ -156,4 +156,3 @@ Now, firmware needs a microcontroller or similar to be able to work. Even the CP
 Why is this important? Well, you remember that concurrency is all about efficiency right? Well, since we have many CPU's already doing work for us on our system, one of our concerns is to not replicate or duplicate that work when we write code.
 
 If a network card has firmware that continually checks if new data has arrived, it's pretty wasteful if we duplicate that by letting our CPU continually check if new data arrives as well. It's much better if we either check once in a while or even better, gets notified when data has arrived for us.
-

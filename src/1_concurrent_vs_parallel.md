@@ -70,7 +70,7 @@ I'll let let this 3 minute video explain it for me:
 
 OK, so it's not the newest video on the subject, but it explains a lot in 3 minutes. Most importantly the gains we try to achieve when applying LEAN techniques, and most importantly: **eliminate waiting and non-value-adding tasks.**
 
-> In programming we could say that we want to avoid `blocking` and `polling` (in a busy loop).
+> In programming, we could say that we want to avoid `blocking` and `polling` (in a busy loop).
 
 Now would adding more resources (more workers) help in the video above? Yes, but we use double the resources to produce the same output as one person with an optimal process could do. That's not the best utilization of our resources.
 

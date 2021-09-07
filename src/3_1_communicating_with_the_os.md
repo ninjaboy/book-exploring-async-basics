@@ -306,25 +306,22 @@ That's why we'll convert our `utf-8` encoded text to `utf-16` encoded Unicode co
 ```rust, ignore
 #[cfg(target_os = "windows")]
 fn syscall(message: String) -> io::Result<()> {
-
     // let's convert our utf-8 to a format windows understands
     let msg: Vec<u16> = message.encode_utf16().collect();
     let msg_ptr = msg.as_ptr();
     let len = msg.len() as u32;
 
     let mut output: u32 = 0;
-        let handle = unsafe { GetStdHandle(-11) };
-        if handle  == -1 {
-            return Err(io::Error::last_os_error())
-        }
+    let handle = unsafe { GetStdHandle(-11) };
+    if handle == -1 {
+        return Err(io::Error::last_os_error());
+    }
 
-        let res = unsafe {
-            WriteConsoleW(handle, msg_ptr, len, &mut output, std::ptr::null())
-            };
+    let res = unsafe { WriteConsoleW(handle, msg_ptr, len, &mut output, std::ptr::null()) };
 
-        if res  == 0 {
-            return Err(io::Error::last_os_error());
-        }
+    if res == 0 {
+        return Err(io::Error::last_os_error());
+    }
 
     assert_eq!(output, len);
     Ok(())
@@ -430,25 +427,22 @@ extern "stdcall" {
 
 #[cfg(target_os = "windows")]
 fn syscall(message: String) -> io::Result<()> {
-
     // let's convert our utf-8 to a format windows understands
     let msg: Vec<u16> = message.encode_utf16().collect();
     let msg_ptr = msg.as_ptr();
     let len = msg.len() as u32;
 
     let mut output: u32 = 0;
-        let handle = unsafe { GetStdHandle(-11) };
-        if handle  == -1 {
-            return Err(io::Error::last_os_error())
-        }
+    let handle = unsafe { GetStdHandle(-11) };
+    if handle == -1 {
+        return Err(io::Error::last_os_error());
+    }
 
-        let res = unsafe {
-            WriteConsoleW(handle, msg_ptr, len, &mut output, std::ptr::null())
-            };
+    let res = unsafe { WriteConsoleW(handle, msg_ptr, len, &mut output, std::ptr::null()) };
 
-        if res  == 0 {
-            return Err(io::Error::last_os_error());
-        }
+    if res == 0 {
+        return Err(io::Error::last_os_error());
+    }
 
     assert_eq!(output, len);
     Ok(())

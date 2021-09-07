@@ -382,25 +382,22 @@ calling convention but use Windows calling convention called <code>stdcall</code
 <p>That's why we'll convert our <code>utf-8</code> encoded text to <code>utf-16</code> encoded Unicode codepoints that can represent these characters and use the <code>WriteConsoleW</code> function.</p>
 <pre><code class="language-rust  ignore">#[cfg(target_os = &quot;windows&quot;)]
 fn syscall(message: String) -&gt; io::Result&lt;()&gt; {
-
     // let's convert our utf-8 to a format windows understands
     let msg: Vec&lt;u16&gt; = message.encode_utf16().collect();
     let msg_ptr = msg.as_ptr();
     let len = msg.len() as u32;
 
     let mut output: u32 = 0;
-        let handle = unsafe { GetStdHandle(-11) };
-        if handle  == -1 {
-            return Err(io::Error::last_os_error())
-        }
+    let handle = unsafe { GetStdHandle(-11) };
+    if handle == -1 {
+        return Err(io::Error::last_os_error());
+    }
 
-        let res = unsafe {
-            WriteConsoleW(handle, msg_ptr, len, &amp;mut output, std::ptr::null())
-            };
+    let res = unsafe { WriteConsoleW(handle, msg_ptr, len, &amp;mut output, std::ptr::null()) };
 
-        if res  == 0 {
-            return Err(io::Error::last_os_error());
-        }
+    if res == 0 {
+        return Err(io::Error::last_os_error());
+    }
 
     assert_eq!(output, len);
     Ok(())
@@ -491,25 +488,22 @@ extern &quot;stdcall&quot; {
 
 #[cfg(target_os = &quot;windows&quot;)]
 fn syscall(message: String) -&gt; io::Result&lt;()&gt; {
-
     // let's convert our utf-8 to a format windows understands
     let msg: Vec&lt;u16&gt; = message.encode_utf16().collect();
     let msg_ptr = msg.as_ptr();
     let len = msg.len() as u32;
 
     let mut output: u32 = 0;
-        let handle = unsafe { GetStdHandle(-11) };
-        if handle  == -1 {
-            return Err(io::Error::last_os_error())
-        }
+    let handle = unsafe { GetStdHandle(-11) };
+    if handle == -1 {
+        return Err(io::Error::last_os_error());
+    }
 
-        let res = unsafe {
-            WriteConsoleW(handle, msg_ptr, len, &amp;mut output, std::ptr::null())
-            };
+    let res = unsafe { WriteConsoleW(handle, msg_ptr, len, &amp;mut output, std::ptr::null()) };
 
-        if res  == 0 {
-            return Err(io::Error::last_os_error());
-        }
+    if res == 0 {
+        return Err(io::Error::last_os_error());
+    }
 
     assert_eq!(output, len);
     Ok(())

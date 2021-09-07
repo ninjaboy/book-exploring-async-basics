@@ -154,7 +154,7 @@ windowed operating systems became the norm, this model simply couldn't work anym
 <p>The first method used to be able to keep a UI interactive (and running background
 processes), was accomplished by what we call <code>non-preemptive multitasking</code>.</p>
 <p>This kind of multitasking put the responsibility of letting the OS run other tasks like responding to input from the mouse, or running a background task in the hands of the programmer.</p>
-<p>Typically the programmer <code>yielded</code> control to the OS.</p>
+<p>Typically, the programmer <code>yielded</code> control to the OS.</p>
 <p>Besides off-loading a huge responsibility to every programmer writing a program
 for your platform, this was naturally error-prone. A small mistake in a programs code
 could halt or crash the entire system.</p>
@@ -177,21 +177,21 @@ has a lot of work or is idle.</p>
 <blockquote>
 <p>If you want to learn more about this kind of threaded multitasking I recommend reading my previous book about <a href="https://cfsamson.gitbook.io/green-threads-explained-in-200-lines-of-rust/">green threads</a>. This is a nice introduction where you'll be able to get the basic knowledge you need about threads, contexts, stacks and scheduling.</p>
 </blockquote>
-<h2 id="hyperthreading"><a class="header" href="#hyperthreading">Hyperthreading</a></h2>
-<p>As CPUs evolved and added more functionality, such as several ALUs (Arithmetic Logic Units), and additional logic units, the CPU manufacturers realized that the entire CPU was never utilized fully. For example, when an operation only required some parts of the CPU, an instruction could be run on the ALU simultaneously. This became the start of Hyperthreading.</p>
+<h2 id="hyper-threading"><a class="header" href="#hyper-threading">Hyper-threading</a></h2>
+<p>As CPUs evolved and added more functionality, such as several ALUs (Arithmetic Logic Units), and additional logic units, the CPU manufacturers realized that the entire CPU was never utilized fully. For example, when an operation only required some parts of the CPU, an instruction could be run on the ALU simultaneously. This became the start of hyper-threading.</p>
 <p>You see, on your computer today that it has i.e. 6 cores, and 12 logical cores.
-This is exactly where Hyperthreading comes in. It &quot;simulates&quot; two cores on the
+This is exactly where hyper-threading comes in. It &quot;simulates&quot; two cores on the
 same core by using unused parts of the CPU to drive progress on thread &quot;2&quot;
 simultaneously as it's running the code on thread &quot;1&quot;. It does this by using a
 number of smart tricks (like the one with the ALU).</p>
-<p>Now, having hyperthreading, we could actually offload some work on one thread while keeping the UI
+<p>Now, having hyper-threading, we could actually offload some work on one thread while keeping the UI
 interactive by responding to events in the second thread even though we only
 had one CPU core thereby utilizing our hardware better.</p>
 <blockquote>
 <p>You might wonder about the performance of Hyper Threading?</p>
-<p>It turns out that Hyperthreading has been continuously improved since the '90s.
+<p>It turns out that hyper-threading has been continuously improved since the '90s.
 Since you're not actually running two CPU's there will be some operations that
-need to wait for each other to finish. The performance gain of hyperthreading
+need to wait for each other to finish. The performance gain of hyper-threading
 compared to multithreading in a single core seems to be <a href="https://en.wikipedia.org/wiki/Hyper-threading#Performance_claims">somewhere close
 to 30 %</a> but
 it largely depends on the workload.</p>
@@ -202,7 +202,7 @@ Processors get faster by improving caches, branch prediction, speculative execut
 and working on the processing pipelines of the processors, but the gains seems to
 be diminishing.</p>
 <p>On the other hand, new processors are so small they allow us to have many on the
-same chip instead. Now, most CPUs have many cores, and most often each core will also have the ability to perform hyperthreading.</p>
+same chip instead. Now, most CPUs have many cores, and most often each core will also have the ability to perform hyper-threading.</p>
 <h2 id="so-how-synchronous-is-the-code-you-write-really"><a class="header" href="#so-how-synchronous-is-the-code-you-write-really">So how synchronous is the code you write, really?</a></h2>
 <p>Like many things, this depends on your perspective. From the perspective of your process and the code you write for it, everything will normally happen in the order you write it.</p>
 <p>From the OS perspective, it might, or might not, interrupt your code, pause it

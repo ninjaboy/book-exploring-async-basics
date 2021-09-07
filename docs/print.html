@@ -327,7 +327,7 @@ It can only help us utilize our resources better and thereby <em>finish a set of
 <iframe width="560" height="315" src="https://www.youtube.com/embed/Oz8BR5Lflzg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 <p>OK, so it's not the newest video on the subject, but it explains a lot in 3 minutes. Most importantly the gains we try to achieve when applying LEAN techniques, and most importantly: <strong>eliminate waiting and non-value-adding tasks.</strong></p>
 <blockquote>
-<p>In programming we could say that we want to avoid <code>blocking</code> and <code>polling</code> (in a busy loop).</p>
+<p>In programming, we could say that we want to avoid <code>blocking</code> and <code>polling</code> (in a busy loop).</p>
 </blockquote>
 <p>Now would adding more resources (more workers) help in the video above? Yes, but we use double the resources to produce the same output as one person with an optimal process could do. That's not the best utilization of our resources.</p>
 <blockquote>
@@ -409,7 +409,7 @@ windowed operating systems became the norm, this model simply couldn't work anym
 <p>The first method used to be able to keep a UI interactive (and running background
 processes), was accomplished by what we call <code>non-preemptive multitasking</code>.</p>
 <p>This kind of multitasking put the responsibility of letting the OS run other tasks like responding to input from the mouse, or running a background task in the hands of the programmer.</p>
-<p>Typically the programmer <code>yielded</code> control to the OS.</p>
+<p>Typically, the programmer <code>yielded</code> control to the OS.</p>
 <p>Besides off-loading a huge responsibility to every programmer writing a program
 for your platform, this was naturally error-prone. A small mistake in a programs code
 could halt or crash the entire system.</p>
@@ -432,21 +432,21 @@ has a lot of work or is idle.</p>
 <blockquote>
 <p>If you want to learn more about this kind of threaded multitasking I recommend reading my previous book about <a href="https://cfsamson.gitbook.io/green-threads-explained-in-200-lines-of-rust/">green threads</a>. This is a nice introduction where you'll be able to get the basic knowledge you need about threads, contexts, stacks and scheduling.</p>
 </blockquote>
-<h2 id="hyperthreading"><a class="header" href="#hyperthreading">Hyperthreading</a></h2>
-<p>As CPUs evolved and added more functionality, such as several ALUs (Arithmetic Logic Units), and additional logic units, the CPU manufacturers realized that the entire CPU was never utilized fully. For example, when an operation only required some parts of the CPU, an instruction could be run on the ALU simultaneously. This became the start of Hyperthreading.</p>
+<h2 id="hyper-threading"><a class="header" href="#hyper-threading">Hyper-threading</a></h2>
+<p>As CPUs evolved and added more functionality, such as several ALUs (Arithmetic Logic Units), and additional logic units, the CPU manufacturers realized that the entire CPU was never utilized fully. For example, when an operation only required some parts of the CPU, an instruction could be run on the ALU simultaneously. This became the start of hyper-threading.</p>
 <p>You see, on your computer today that it has i.e. 6 cores, and 12 logical cores.
-This is exactly where Hyperthreading comes in. It &quot;simulates&quot; two cores on the
+This is exactly where hyper-threading comes in. It &quot;simulates&quot; two cores on the
 same core by using unused parts of the CPU to drive progress on thread &quot;2&quot;
 simultaneously as it's running the code on thread &quot;1&quot;. It does this by using a
 number of smart tricks (like the one with the ALU).</p>
-<p>Now, having hyperthreading, we could actually offload some work on one thread while keeping the UI
+<p>Now, having hyper-threading, we could actually offload some work on one thread while keeping the UI
 interactive by responding to events in the second thread even though we only
 had one CPU core thereby utilizing our hardware better.</p>
 <blockquote>
 <p>You might wonder about the performance of Hyper Threading?</p>
-<p>It turns out that Hyperthreading has been continuously improved since the '90s.
+<p>It turns out that hyper-threading has been continuously improved since the '90s.
 Since you're not actually running two CPU's there will be some operations that
-need to wait for each other to finish. The performance gain of hyperthreading
+need to wait for each other to finish. The performance gain of hyper-threading
 compared to multithreading in a single core seems to be <a href="https://en.wikipedia.org/wiki/Hyper-threading#Performance_claims">somewhere close
 to 30 %</a> but
 it largely depends on the workload.</p>
@@ -457,7 +457,7 @@ Processors get faster by improving caches, branch prediction, speculative execut
 and working on the processing pipelines of the processors, but the gains seems to
 be diminishing.</p>
 <p>On the other hand, new processors are so small they allow us to have many on the
-same chip instead. Now, most CPUs have many cores, and most often each core will also have the ability to perform hyperthreading.</p>
+same chip instead. Now, most CPUs have many cores, and most often each core will also have the ability to perform hyper-threading.</p>
 <h2 id="so-how-synchronous-is-the-code-you-write-really"><a class="header" href="#so-how-synchronous-is-the-code-you-write-really">So how synchronous is the code you write, really?</a></h2>
 <p>Like many things, this depends on your perspective. From the perspective of your process and the code you write for it, everything will normally happen in the order you write it.</p>
 <p>From the OS perspective, it might, or might not, interrupt your code, pause it
@@ -490,7 +490,7 @@ without talking about operating systems in a bit of detail.</p>
 <p>This ties into what I talked about in the first chapter when I said that <code>concurrent</code>
 needs to be talked about within a reference frame and I explained that the OS
 might stop and start your process at any time.</p>
-<p>What we call synchronous code is in most cases code that appears as synchronous to us as programmers. Neither the OS or the CPU live in a fully synchronous world.</p>
+<p>What we call synchronous code is in most cases code that appears as synchronous to us as programmers. Neither the OS nor the CPU live in a fully synchronous world.</p>
 <p>Operating systems use <code>preemptive multitasking</code> and as long as the operating system you're running is preemptively scheduling processes, you won't have a
 guarantee that your code runs instruction by instruction without interruption.</p>
 <p>The operating system will make sure that all important processes get some time from the CPU to make progress.</p>
@@ -756,25 +756,22 @@ calling convention but use Windows calling convention called <code>stdcall</code
 <p>That's why we'll convert our <code>utf-8</code> encoded text to <code>utf-16</code> encoded Unicode codepoints that can represent these characters and use the <code>WriteConsoleW</code> function.</p>
 <pre><code class="language-rust  ignore">#[cfg(target_os = &quot;windows&quot;)]
 fn syscall(message: String) -&gt; io::Result&lt;()&gt; {
-
     // let's convert our utf-8 to a format windows understands
     let msg: Vec&lt;u16&gt; = message.encode_utf16().collect();
     let msg_ptr = msg.as_ptr();
     let len = msg.len() as u32;
 
     let mut output: u32 = 0;
-        let handle = unsafe { GetStdHandle(-11) };
-        if handle  == -1 {
-            return Err(io::Error::last_os_error())
-        }
+    let handle = unsafe { GetStdHandle(-11) };
+    if handle == -1 {
+        return Err(io::Error::last_os_error());
+    }
 
-        let res = unsafe {
-            WriteConsoleW(handle, msg_ptr, len, &amp;mut output, std::ptr::null())
-            };
+    let res = unsafe { WriteConsoleW(handle, msg_ptr, len, &amp;mut output, std::ptr::null()) };
 
-        if res  == 0 {
-            return Err(io::Error::last_os_error());
-        }
+    if res == 0 {
+        return Err(io::Error::last_os_error());
+    }
 
     assert_eq!(output, len);
     Ok(())
@@ -865,25 +862,22 @@ extern &quot;stdcall&quot; {
 
 #[cfg(target_os = &quot;windows&quot;)]
 fn syscall(message: String) -&gt; io::Result&lt;()&gt; {
-
     // let's convert our utf-8 to a format windows understands
     let msg: Vec&lt;u16&gt; = message.encode_utf16().collect();
     let msg_ptr = msg.as_ptr();
     let len = msg.len() as u32;
 
     let mut output: u32 = 0;
-        let handle = unsafe { GetStdHandle(-11) };
-        if handle  == -1 {
-            return Err(io::Error::last_os_error())
-        }
+    let handle = unsafe { GetStdHandle(-11) };
+    if handle == -1 {
+        return Err(io::Error::last_os_error());
+    }
 
-        let res = unsafe {
-            WriteConsoleW(handle, msg_ptr, len, &amp;mut output, std::ptr::null())
-            };
+    let res = unsafe { WriteConsoleW(handle, msg_ptr, len, &amp;mut output, std::ptr::null()) };
 
-        if res  == 0 {
-            return Err(io::Error::last_os_error());
-        }
+    if res == 0 {
+        return Err(io::Error::last_os_error());
+    }
 
     assert_eq!(output, len);
     Ok(())
@@ -1126,7 +1120,7 @@ of interrupt is registered by the driver, so it's actually the driver that handl
 <p>Why is this important? Well, you remember that concurrency is all about efficiency right? Well, since we have many CPU's already doing work for us on our system, one of our concerns is to not replicate or duplicate that work when we write code.</p>
 <p>If a network card has firmware that continually checks if new data has arrived, it's pretty wasteful if we duplicate that by letting our CPU continually check if new data arrives as well. It's much better if we either check once in a while or even better, gets notified when data has arrived for us.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="strategies-for-handling-io"><a class="header" href="#strategies-for-handling-io">Strategies for handling I/O</a></h1>
-<p>Before we dive into Writing some code we'll finish off this part of the book talking a bit about different strategies of handling I/O and concurrency. Now, just note that I'm covering I/O in general here, but I use network communication as the main example. Different strategies can have different strengths depending on what type of I/O we're talking about.</p>
+<p>Before we dive into writing some code we'll finish off this part of the book talking a bit about different strategies of handling I/O and concurrency. Now, just note that I'm covering I/O in general here, but I use network communication as the main example. Different strategies can have different strengths depending on what type of I/O we're talking about.</p>
 <h2 id="1-using-os-threads"><a class="header" href="#1-using-os-threads">1. Using OS threads</a></h2>
 <p>Now one way of accomplishing this is letting the OS take care of everything for us. We do this by simply spawning a new OS thread for each task we want to accomplish and write code like we normally would.</p>
 <p><strong>Pros:</strong></p>

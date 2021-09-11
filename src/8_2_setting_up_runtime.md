@@ -83,7 +83,7 @@ As you see here, we also clone the `Sender` part which we'll pass on to each thr
 so they can send messages to our `main` thread.
 
 After that's done we build our thread. We'll use `thread::Builder::new()` instead
-of use `thread::spawn` since we want to give each thread a name. We'll only use this
+of using `thread::spawn` since we want to give each thread a name. We'll only use this
 name when we `print` from our event since it will be clear from which thread
 we printed the message.
 
@@ -229,7 +229,7 @@ queue and that's it.
 > How can `Registrator` know that the `epoll` thread hasn't stopped?
 >
 > We'll cover this in detail in the next book, but both `Poll` and `Registrator`
-> holds a reference to an `AtomicBool` which only job is to indicate if the queue
+> holds a reference to an `AtomicBool` whose only job is to indicate if the queue
 > is "alive" or not. In the `Drop` implemenation of `Poll` we set this flag to
 > false in which case a call to register an event will return an `Err`.
 
@@ -247,9 +247,10 @@ pool, but we name the thread `epoll`.
 let epoll_thread = thread::Builder::new()
     .name("epoll".to_string())
     .spawn(move || {
+        let mut events = minimio::Events::with_capacity(1024);
 ```
 
-Now we're inside the `epoll` thread and will define what this thread needs to
+Now that we're inside the `epoll` thread, we will define what this thread should
 do to poll and handle events.
 
 First we allocate a buffer to hold event objects that we get from our `poll` instance.
@@ -260,10 +261,9 @@ has occurred. In our case the token is a simple `usize`.
 ```rust, ignore
 let mut events = minimio::Events::with_capacity(1024);
 ```
-We allocate the buffer here since we only allocate this once when we do it here,
-and we want to avoid allocating a new buffer on every turn of our `loop`.
+We allocate the buffer here to avoid allocating a new buffer on every turn of our `loop`.
 
-Basically, our `epoll` thread will run a loop which consciously polls for new
+Basically, our `epoll` thread will run a loop which continuously polls for new
 events.
 
 ```rust, ignore

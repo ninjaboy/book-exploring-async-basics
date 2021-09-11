@@ -187,7 +187,7 @@ pub struct Runtime {
     epoll_timeout: Arc<Mutex<Option<i32>>>,
     /// Channel used by both our threadpool and our epoll thread to send events
     /// to the main loop
-    event_reciever: Receiver<PollEvent>,
+    event_receiver: Receiver<PollEvent>,
     /// Creates an unique identity for our callbacks
     identity_token: usize,
     /// The number of events pending. When this is zero, we're done
@@ -216,18 +216,18 @@ enum PollEvent {
 impl Runtime {
     pub fn new() -> Self {
         // ===== THE REGULAR THREADPOOL =====
-        let (event_sender, event_reciever) = channel::<PollEvent>();
+        let (event_sender, event_receiver) = channel::<PollEvent>();
         let mut threads = Vec::with_capacity(4);
 
         for i in 0..4 {
-            let (evt_sender, evt_reciever) = channel::<Task>();
+            let (evt_sender, evt_receiver) = channel::<Task>();
             let event_sender = event_sender.clone();
 
             let handle = thread::Builder::new()
                 .name(format!("pool{}", i))
                 .spawn(move || {
 
-                    while let Ok(task) = evt_reciever.recv() {
+                    while let Ok(task) = evt_receiver.recv() {
                         print(format!("received a task of type: {}", task.kind));
 
                         if let ThreadPoolTaskKind::Close = task.kind {
@@ -300,7 +300,7 @@ impl Runtime {
             epoll_registrator: registrator,
             epoll_thread,
             epoll_timeout,
-            event_reciever,
+            event_receiver,
             identity_token: 0,
             pending_events: 0,
             thread_pool: threads,
@@ -365,7 +365,7 @@ impl Runtime {
             // We handle one and one event but multiple events could be returned
             // on the same poll. We won't cover that here though but there are
             // several ways of handling this.
-            if let Ok(event) = self.event_reciever.recv() {
+            if let Ok(event) = self.event_receiver.recv() {
                 match event {
                     PollEvent::Timeout => (),
                     PollEvent::Threadpool((thread_id, callback_id, data)) => {

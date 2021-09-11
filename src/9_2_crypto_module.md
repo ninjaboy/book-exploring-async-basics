@@ -42,4 +42,4 @@ Once that is finished we return the result as `Js::Int(fib)`.
 
 Lastly we dereference our `RUNTIME` and we call `rt.register_work(work, ThreadPoolTaskKind::Encrypt, cb)` to register our task with the `threadpool`.
 
-Let's move on, we're very soon at the finish line.
+Let's move on, we're almost at the finish line.

@@ -61,9 +61,9 @@ a small function so we try to avoid the long functions we had in the introductio
 > several threads tried to `read` and `generate` new Id's at the same time.
 
 We use the `wrapping_add` method on `usize` to get the next Id, this means that
-when we reach `18446744073709551615` we wrap around to 0 again.
+when we reach `18446744073709551615` we wrap around to `0` again.
 
-We do check of our callback_queue contains our key (even though that is unlikely
+We do a check if our `callback_queue` contains our key (even though that is unlikely
 by design), and if it's taken we just generate a new one until we find a available
 one.
 
@@ -95,10 +95,10 @@ case so we don't have to write `FnOnce(Js) -> ()`.
 Since callbacks are meant to only be called once, this is a perfectly fine bound
 for us to use here.
 
-Now, traits doesn't have a size so for the compiler to be able to allocate space
+Now, traits don't have a size so for the compiler to be able to allocate space
 for it on the stack we either need to take a reference `&FnOnce(Js)` or place it
 on the heap using `Box`. We do the latter since that's the only thing that makes
-sense for our use case. Box is a pointer to a heap allocated variable which we do
+sense for our use case. `Box` is a pointer to a heap allocated variable which we do
 know the size of so we store that reference in our `callback_queue` HashMap.
 
 > What makes a closure?
@@ -125,8 +125,7 @@ pub fn register_event_epoll(&mut self, token: usize, cb: impl FnOnce(Js) + 'stat
 ```
 
 The first thing we do is to add the callback to our `callback_queue`, calling the
-method we explained previously. Next we do a print statement, just since we want
-to print out the flow of our program we need to add this at strategic places.
+method we explained previously.
 
 > One important thing to note here. Our `token` in this case is already guaranteed
 > to be unique. We generate it in the `Http` module (which is the only one registering
@@ -185,7 +184,7 @@ need to be `Send` since we don't pass the callback itself to the thread pool.
 Next we generate a new identity with `self.generate_cb_identity()` and we add the
 callback to our callback queue.
 
-Then we construct a new `Event`, and as I have shown earlier, we need to `Box` the
+We then construct a new `Event`, and as I have shown earlier, we need to `Box` the
 closure.
 
 Now, the last part could be made arbitrarily complex. This is where you decide how
@@ -213,7 +212,7 @@ The last part of the "infrastructure" is a function to set a timeout.
     }
 ```
 
-Set timeout uses `std::time::Instant` to get a representation of "now". It's the first
+`set_timeout` uses `std::time::Instant` to get a representation of "now". It's the first
 thing we do since the user expects the timeout to be calculated from "now", and some
 of our operations here might take a little time.
 

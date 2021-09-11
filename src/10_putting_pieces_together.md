@@ -127,9 +127,9 @@ into our closure `map(|l| format!("{}\n",l))`, which results in `l` as this line
 
 We simply map this line into a `String` which we have appended a line break to.
 
-Lastly we `unwrap` the result of these operations. If you kept your thoungue right
-all the way through this should either be Some(the_first_line_starting_with_Location),
-or None. If it's None we just pass inn an empty `String`.
+Lastly we `unwrap` the result of these operations. If you kept your tongue right
+all the way through this should either be `Some(the_first_line_starting_with_Location)`,
+or `None`. If it's `None` we just pass in an empty `String`.
 
 Lastly we output everything.
 

@@ -58,7 +58,7 @@ pub struct Runtime {
     epoll_timeout: Arc<Mutex<Option<i32>>>,
     /// Channel used by both our threadpool and our epoll thread to send events
     /// to the main loop
-    event_reciever: Receiver<PollEvent>,
+    event_receiver: Receiver<PollEvent>,
     /// Creates an unique identity for our callbacks
     identity_token: usize,
     /// The number of events pending. When this is zero, we're done

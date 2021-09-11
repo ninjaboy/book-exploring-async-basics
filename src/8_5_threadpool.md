@@ -1,7 +1,7 @@
 # The Threadpool
 
 The threadpool is where we'll process the CPU intensive tasks and the I/O tasks
-which can't be reasonably handled by `epoll, kqueue or IOCP`. One of these tasks
+which can't be reasonably handled by `epoll`, `kqueue` or `IOCP`. One of these tasks
 are file system operations.
 
 The reason for doing file I/O in the thread pool is complex, but the main takeaway
@@ -9,12 +9,12 @@ is that due to how files are cached and how the hard drive works, most often the
 file I/O will be `Ready` almost immediately, so waiting for that in a event queue
 has very little effect in practice.
 
-The second reason is that while Windows do have a completion based model, Linux
-and macOS doesn't. Reading a file into a buffer which your process controls can take some
+The second reason is that while Windows does have a completion based model, Linux
+and macOS don't. Reading a file into a buffer which your process controls can take some
 time, and if we do that in our main loop it will block a little bit which we really try
 to avoid.
 
-By doing this in a thread pool we make sure that these operations won't block our
+By processing the tasks in a thread pool we make sure that these operations won't block our
 main event loop and only notify us once the data is ready for us in memory.
 
 The code we need to add to process events from the thread pool is short an simple:

@@ -156,21 +156,21 @@ let mut ticks = 0; // just for us printing out
 // First we run our &quot;main&quot; function
 f();
 </code></pre>
-<p>The first two lines is just a <code>hack</code> we use in our code to make it &quot;look&quot; more
+<p>The first two lines is just a hack we use in our code to make it &quot;look&quot; more
 like javascript. We take the pointer to <code>self</code> and set it in the global
 variable <code>RUNTIME</code>.</p>
 <p>We could instead pass our <code>runtime</code> around but that wouldn't
 be very ergonomic. Another option would be to use <code>lazy_static</code> crate to initialize this field in a slightly safer way, but we'd have to explain what <code>lazy_static</code> do to keep our promise of minimal &quot;magic&quot;.</p>
 <p>To be honest, we only set this once, and it's set at the start of of our event loop and we only access this from the same thread we created it. It might not be pretty but it's safe.</p>
 <p><code>ticks</code> is only a counter for us to keep track of how many times we've looped which for display.</p>
-<p>The last and least visible part of this code is actually where we kick everything off, calling <code>f()</code>. <code>f</code> will be the code we wrote in the <code>javascript</code> function in the last chapter. If this is empty nothing will happen.</p>
+<p>The last and least visible part of this code is actually where we kick everything off, calling <code>f()</code>. <code>f</code> will be the code we wrote in the <code>javascript</code> function in the last chapter, if this is empty nothing will happen.</p>
 <h2 id="starting-the-event-loop"><a class="header" href="#starting-the-event-loop">Starting the event loop</a></h2>
 <pre><code class="language-rust  ignore">// ===== EVENT LOOP =====
 while self.pending_events &gt; 0 {
     ticks += 1;
 </code></pre>
 <p><code>self.pending_events</code> keeps track of how many pending events we have, so that when no events are left we exit the loop since our event loop is finished.</p>
-<p>So where does these events come from? In our <code>javascript</code> function <code>f</code> which we introduced in the chapter <a href="./7_0_introducing_our_main_example.html">Introducing our main example</a> you probably noticed that we called functions like
+<p>So where do these events come from? In our <code>javascript</code> function <code>f</code> which we introduced in the chapter <a href="./7_0_introducing_our_main_example.html">Introducing our main example</a> you probably noticed that we called functions like
 <code>set_timeout</code> and <code>Fs::read</code>. These functions are defined in the Node runtime
 (as they are in ours), and their main responsibility is to create tasks and register interest on events. When one of these tasks or interests are registered this counter is increased.</p>
 <p><code>ticks</code> is just increasing a <code>tick</code> in the counter.</p>
@@ -206,7 +206,7 @@ drop(epoll_timeout_lock);
 <p><code>self.epoll_timeout</code> is a <code>Mutex</code> so we need to lock it to be able to change the value it holds. Now, this is important, we need to make sure the lock is released before we <code>poll</code>. <code>poll</code> will suspend our thread, and it will try to read the value in <code>self.epoll_timeout</code>.</p>
 <p>If we're still holding the lock we'll end up in a <code>deadlock</code>. <code>drop(epoll_timeout_lock)</code> releases the lock. We'll explain a bit more in detail how this works in the next chapter.</p>
 <h3 id="wait-for-events"><a class="header" href="#wait-for-events">Wait for events</a></h3>
-<pre><code class="language-rust  ignore">if let Ok(event) = self.event_reciever.recv() {
+<pre><code class="language-rust  ignore">if let Ok(event) = self.event_receiver.recv() {
     match event {
         PollEvent::Timeout =&gt; (),
         PollEvent::Threadpool((thread_id, callback_id, data)) =&gt; {
@@ -219,7 +219,7 @@ drop(epoll_timeout_lock);
 }
 self.run_callbacks();
 </code></pre>
-<p>Both our <code>threadpool</code> threads and our <code>epoll</code> thread holds a <code>sending</code> part of the channel <code>self.event_reciever</code>. If either a thread in the <code>threadpool</code> finishes a task, or if the <code>epoll</code> thread receives notification that an event is ready a <code>PollEvent</code> is sent through the channel and received here.</p>
+<p>Both our <code>threadpool</code> threads and our <code>epoll</code> thread holds a <code>sending</code> part of the channel <code>self.event_receiver</code>. If either a thread in the <code>threadpool</code> finishes a task, or if the <code>epoll</code> thread receives notification that an event is ready a <code>PollEvent</code> is sent through the channel and received here.</p>
 <p>This will block our main thread until something happens, <strong>or</strong> a timeout occurs.</p>
 <blockquote>
 <p><strong>Note:</strong>
@@ -231,7 +231,7 @@ event loop to continue and handle that timer.</p>
 <p>We'll explain these methods in the following chapters.</p>
 <h2 id="5-check"><a class="header" href="#5-check">5. Check</a></h2>
 <pre><code class="language-rust  ignore">// ===== CHECK =====
-// an set immediate function could be added pretty easily but we won't that here
+// a set immediate function could be added pretty easily but we won't that here
 </code></pre>
 <p>Node implements a check &quot;hook&quot; to the event loop next. Calls to <code>setImmediate</code>
 execute here. I just include it for completeness but we won't do anything in this phase.</p>
@@ -275,7 +275,7 @@ all destructors are run.</p>
         // NOT PART OF LOOP, JUST FOR US TO SEE WHAT TICK IS EXECUTING
         print(format!(&quot;===== TICK {} =====&quot;, ticks));
 
-        // ===== 2. TIMERS =====
+        // ===== 1. TIMERS =====
         self.process_expired_timers();
 
         // ===== 2. CALLBACKS =====
@@ -306,7 +306,7 @@ all destructors are run.</p>
         // We handle one and one event but multiple events could be returned
         // on the same poll. We won't cover that here though but there are
         // several ways of handling this.
-        if let Ok(event) = self.event_reciever.recv() {
+        if let Ok(event) = self.event_receiver.recv() {
             match event {
                 PollEvent::Timeout =&gt; (),
                 PollEvent::Threadpool((thread_id, callback_id, data)) =&gt; {

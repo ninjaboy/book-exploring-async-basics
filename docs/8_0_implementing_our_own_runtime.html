@@ -181,7 +181,7 @@ go through them in this book.</p>
     epoll_timeout: Arc&lt;Mutex&lt;Option&lt;i32&gt;&gt;&gt;,
     /// Channel used by both our threadpool and our epoll thread to send events
     /// to the main loop
-    event_reciever: Receiver&lt;PollEvent&gt;,
+    event_receiver: Receiver&lt;PollEvent&gt;,
     /// Creates an unique identity for our callbacks
     identity_token: usize,
     /// The number of events pending. When this is zero, we're done

@@ -1539,7 +1539,7 @@ go through them in this book.</p>
     epoll_timeout: Arc&lt;Mutex&lt;Option&lt;i32&gt;&gt;&gt;,
     /// Channel used by both our threadpool and our epoll thread to send events
     /// to the main loop
-    event_reciever: Receiver&lt;PollEvent&gt;,
+    event_receiver: Receiver&lt;PollEvent&gt;,
     /// Creates an unique identity for our callbacks
     identity_token: usize,
     /// The number of events pending. When this is zero, we're done
@@ -1683,21 +1683,21 @@ let mut ticks = 0; // just for us printing out
 // First we run our &quot;main&quot; function
 f();
 </code></pre>
-<p>The first two lines is just a <code>hack</code> we use in our code to make it &quot;look&quot; more
+<p>The first two lines is just a hack we use in our code to make it &quot;look&quot; more
 like javascript. We take the pointer to <code>self</code> and set it in the global
 variable <code>RUNTIME</code>.</p>
 <p>We could instead pass our <code>runtime</code> around but that wouldn't
 be very ergonomic. Another option would be to use <code>lazy_static</code> crate to initialize this field in a slightly safer way, but we'd have to explain what <code>lazy_static</code> do to keep our promise of minimal &quot;magic&quot;.</p>
 <p>To be honest, we only set this once, and it's set at the start of of our event loop and we only access this from the same thread we created it. It might not be pretty but it's safe.</p>
 <p><code>ticks</code> is only a counter for us to keep track of how many times we've looped which for display.</p>
-<p>The last and least visible part of this code is actually where we kick everything off, calling <code>f()</code>. <code>f</code> will be the code we wrote in the <code>javascript</code> function in the last chapter. If this is empty nothing will happen.</p>
+<p>The last and least visible part of this code is actually where we kick everything off, calling <code>f()</code>. <code>f</code> will be the code we wrote in the <code>javascript</code> function in the last chapter, if this is empty nothing will happen.</p>
 <h2 id="starting-the-event-loop"><a class="header" href="#starting-the-event-loop">Starting the event loop</a></h2>
 <pre><code class="language-rust  ignore">// ===== EVENT LOOP =====
 while self.pending_events &gt; 0 {
     ticks += 1;
 </code></pre>
 <p><code>self.pending_events</code> keeps track of how many pending events we have, so that when no events are left we exit the loop since our event loop is finished.</p>
-<p>So where does these events come from? In our <code>javascript</code> function <code>f</code> which we introduced in the chapter <a href="./7_0_introducing_our_main_example.html">Introducing our main example</a> you probably noticed that we called functions like
+<p>So where do these events come from? In our <code>javascript</code> function <code>f</code> which we introduced in the chapter <a href="./7_0_introducing_our_main_example.html">Introducing our main example</a> you probably noticed that we called functions like
 <code>set_timeout</code> and <code>Fs::read</code>. These functions are defined in the Node runtime
 (as they are in ours), and their main responsibility is to create tasks and register interest on events. When one of these tasks or interests are registered this counter is increased.</p>
 <p><code>ticks</code> is just increasing a <code>tick</code> in the counter.</p>
@@ -1733,7 +1733,7 @@ drop(epoll_timeout_lock);
 <p><code>self.epoll_timeout</code> is a <code>Mutex</code> so we need to lock it to be able to change the value it holds. Now, this is important, we need to make sure the lock is released before we <code>poll</code>. <code>poll</code> will suspend our thread, and it will try to read the value in <code>self.epoll_timeout</code>.</p>
 <p>If we're still holding the lock we'll end up in a <code>deadlock</code>. <code>drop(epoll_timeout_lock)</code> releases the lock. We'll explain a bit more in detail how this works in the next chapter.</p>
 <h3 id="wait-for-events"><a class="header" href="#wait-for-events">Wait for events</a></h3>
-<pre><code class="language-rust  ignore">if let Ok(event) = self.event_reciever.recv() {
+<pre><code class="language-rust  ignore">if let Ok(event) = self.event_receiver.recv() {
     match event {
         PollEvent::Timeout =&gt; (),
         PollEvent::Threadpool((thread_id, callback_id, data)) =&gt; {
@@ -1746,7 +1746,7 @@ drop(epoll_timeout_lock);
 }
 self.run_callbacks();
 </code></pre>
-<p>Both our <code>threadpool</code> threads and our <code>epoll</code> thread holds a <code>sending</code> part of the channel <code>self.event_reciever</code>. If either a thread in the <code>threadpool</code> finishes a task, or if the <code>epoll</code> thread receives notification that an event is ready a <code>PollEvent</code> is sent through the channel and received here.</p>
+<p>Both our <code>threadpool</code> threads and our <code>epoll</code> thread holds a <code>sending</code> part of the channel <code>self.event_receiver</code>. If either a thread in the <code>threadpool</code> finishes a task, or if the <code>epoll</code> thread receives notification that an event is ready a <code>PollEvent</code> is sent through the channel and received here.</p>
 <p>This will block our main thread until something happens, <strong>or</strong> a timeout occurs.</p>
 <blockquote>
 <p><strong>Note:</strong>
@@ -1758,7 +1758,7 @@ event loop to continue and handle that timer.</p>
 <p>We'll explain these methods in the following chapters.</p>
 <h2 id="5-check"><a class="header" href="#5-check">5. Check</a></h2>
 <pre><code class="language-rust  ignore">// ===== CHECK =====
-// an set immediate function could be added pretty easily but we won't that here
+// a set immediate function could be added pretty easily but we won't that here
 </code></pre>
 <p>Node implements a check &quot;hook&quot; to the event loop next. Calls to <code>setImmediate</code>
 execute here. I just include it for completeness but we won't do anything in this phase.</p>
@@ -1802,7 +1802,7 @@ all destructors are run.</p>
         // NOT PART OF LOOP, JUST FOR US TO SEE WHAT TICK IS EXECUTING
         print(format!(&quot;===== TICK {} =====&quot;, ticks));
 
-        // ===== 2. TIMERS =====
+        // ===== 1. TIMERS =====
         self.process_expired_timers();
 
         // ===== 2. CALLBACKS =====
@@ -1833,7 +1833,7 @@ all destructors are run.</p>
         // We handle one and one event but multiple events could be returned
         // on the same poll. We won't cover that here though but there are
         // several ways of handling this.
-        if let Ok(event) = self.event_reciever.recv() {
+        if let Ok(event) = self.event_receiver.recv() {
             match event {
                 PollEvent::Timeout =&gt; (),
                 PollEvent::Threadpool((thread_id, callback_id, data)) =&gt; {
@@ -1941,7 +1941,7 @@ let event_sender = event_sender.clone();
 <p>As you see here, we also clone the <code>Sender</code> part which we'll pass on to each thread
 so they can send messages to our <code>main</code> thread.</p>
 <p>After that's done we build our thread. We'll use <code>thread::Builder::new()</code> instead
-of use <code>thread::spawn</code> since we want to give each thread a name. We'll only use this
+of using <code>thread::spawn</code> since we want to give each thread a name. We'll only use this
 name when we <code>print</code> from our event since it will be clear from which thread
 we printed the message.</p>
 <pre><code class="language-rust  ignore">let handle = thread::Builder::new()
@@ -2062,7 +2062,7 @@ queue and that's it.</p>
 <blockquote>
 <p>How can <code>Registrator</code> know that the <code>epoll</code> thread hasn't stopped?</p>
 <p>We'll cover this in detail in the next book, but both <code>Poll</code> and <code>Registrator</code>
-holds a reference to an <code>AtomicBool</code> which only job is to indicate if the queue
+holds a reference to an <code>AtomicBool</code> whose only job is to indicate if the queue
 is &quot;alive&quot; or not. In the <code>Drop</code> implemenation of <code>Poll</code> we set this flag to
 false in which case a call to register an event will return an <code>Err</code>.</p>
 </blockquote>
@@ -2076,8 +2076,9 @@ pool, but we name the thread <code>epoll</code>.</p>
 <pre><code class="language-rust  ignore">let epoll_thread = thread::Builder::new()
     .name(&quot;epoll&quot;.to_string())
     .spawn(move || {
+        let mut events = minimio::Events::with_capacity(1024);
 </code></pre>
-<p>Now we're inside the <code>epoll</code> thread and will define what this thread needs to
+<p>Now that we're inside the <code>epoll</code> thread, we will define what this thread should
 do to poll and handle events.</p>
 <p>First we allocate a buffer to hold event objects that we get from our <code>poll</code> instance.
 These objects contain information about the event that's occurred including a
@@ -2085,9 +2086,8 @@ These objects contain information about the event that's occurred including a
 has occurred. In our case the token is a simple <code>usize</code>.</p>
 <pre><code class="language-rust  ignore">let mut events = minimio::Events::with_capacity(1024);
 </code></pre>
-<p>We allocate the buffer here since we only allocate this once when we do it here,
-and we want to avoid allocating a new buffer on every turn of our <code>loop</code>.</p>
-<p>Basically, our <code>epoll</code> thread will run a loop which consciously polls for new
+<p>We allocate the buffer here to avoid allocating a new buffer on every turn of our <code>loop</code>.</p>
+<p>Basically, our <code>epoll</code> thread will run a loop which continuously polls for new
 events.</p>
 <pre><code class="language-rust  ignore">loop {
 </code></pre>
@@ -2330,10 +2330,10 @@ at what instance it's supposed to be run and I add that to this collection.</p>
 <p>Choosing a <code>BTreeMap</code> here allows me to get a range <code>range(..=Instant::now())</code>
 which is from the start of the map, up until or equal to the instant NOW.</p>
 <p>Now I take every key in this range and add it to <code>timers_to_remove</code>, and the reason
-for this is that I found no good way to both get a range and remove the key's in one
+for this is that I found no good way to both get a range and remove the keys in one
 operation without allocating a small buffer every time. You can iterate over the range
 but due to the ownership rules you can't remove them at the same time, and we want to
-remove the timers, that we're done with.</p>
+remove the timers that we're done with.</p>
 <p>The event loop will run repeatedly, so avoiding any allocations inside the loop is smart. There is no need to have this overhead.</p>
 <pre><code class="language-rust  ignore">while let Some(key) = timers_to_remove.pop() {
     let callback_id = self.timers.remove(&amp;key).unwrap();
@@ -2343,7 +2343,7 @@ remove the timers, that we're done with.</p>
 <p>The next step is to take every timer that has expired, remove the timer from our <code>self.timers</code> collection and get their <code>callback_id</code>.</p>
 <p>As I explained in the previous chapter, this is an unique Id for this callback. What's
 important here is that we don't run the callback <strong>immediately</strong>. Node actually registers callbacks to be run on the next <code>tick</code>. An exception is the timers since they either have timed out or is a timer with a timeout of <code>0</code>. In this case a timer will not wait for the next tick if it has timed out (or  if it has a timeout of <code>0</code>) but instead they will be invoked immediately as you'll see next.</p>
-<p>Anyway, for now we add the callback id's to <code>self.callbacks_to_run</code>.</p>
+<p>Anyway, for now we add the callback ids to <code>self.callbacks_to_run</code>.</p>
 <p>Before we continue, let's recap by looking what members of the <code>Runtime</code> struct
 we used here:</p>
 <pre><code class="language-rust  ignore">pub struct Runtime {
@@ -2384,17 +2384,17 @@ you're going to be alright :)</p>
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="the-threadpool-1"><a class="header" href="#the-threadpool-1">The Threadpool</a></h1>
 <p>The threadpool is where we'll process the CPU intensive tasks and the I/O tasks
-which can't be reasonably handled by <code>epoll, kqueue or IOCP</code>. One of these tasks
+which can't be reasonably handled by <code>epoll</code>, <code>kqueue</code> or <code>IOCP</code>. One of these tasks
 are file system operations.</p>
 <p>The reason for doing file I/O in the thread pool is complex, but the main takeaway
 is that due to how files are cached and how the hard drive works, most often the
 file I/O will be <code>Ready</code> almost immediately, so waiting for that in a event queue
 has very little effect in practice.</p>
-<p>The second reason is that while Windows do have a completion based model, Linux
-and macOS doesn't. Reading a file into a buffer which your process controls can take some
+<p>The second reason is that while Windows does have a completion based model, Linux
+and macOS don't. Reading a file into a buffer which your process controls can take some
 time, and if we do that in our main loop it will block a little bit which we really try
 to avoid.</p>
-<p>By doing this in a thread pool we make sure that these operations won't block our
+<p>By processing the tasks in a thread pool we make sure that these operations won't block our
 main event loop and only notify us once the data is ready for us in memory.</p>
 <p>The code we need to add to process events from the thread pool is short an simple:</p>
 <pre><code class="language-rust  ignore">fn process_threadpool_events(&amp;mut self, thread_id: usize, callback_id: usize, data: Js {
@@ -2422,7 +2422,7 @@ and <code>callback_id</code> the same value since both represents an unique valu
 event. It simplifies things slightly for us.</p>
 <p>We add the <code>callback_id</code> to the collection of callbacks to run. We pass
 in <code>Js::Undefined</code> since we'll not actually pass any data along here. You'll see
-why when we reach the `<a href="./8_3_http_module.html">Http module</a> chapter, but the main
+why when we reach the <a href="./8_3_http_module.html">Http module</a> chapter, but the main
 point is that the I/O queue doesn't return any data itself, it just tells us that
 data is ready to be read.</p>
 <p>Lastly it's only for our own bookkeeping we decrement the count of outstanding
@@ -2522,8 +2522,8 @@ it's only one thread that will be generating Id's. This could cause problems if
 several threads tried to <code>read</code> and <code>generate</code> new Id's at the same time.</p>
 </blockquote>
 <p>We use the <code>wrapping_add</code> method on <code>usize</code> to get the next Id, this means that
-when we reach <code>18446744073709551615</code> we wrap around to 0 again.</p>
-<p>We do check of our callback_queue contains our key (even though that is unlikely
+when we reach <code>18446744073709551615</code> we wrap around to <code>0</code> again.</p>
+<p>We do a check if our <code>callback_queue</code> contains our key (even though that is unlikely
 by design), and if it's taken we just generate a new one until we find a available
 one.</p>
 <p>Next up is the method we use to add a callback to our <code>callback_queue</code>:</p>
@@ -2547,10 +2547,10 @@ up as a result of Rusts <code>RAII</code> pattern. It's implicit that <code>FnOn
 case so we don't have to write <code>FnOnce(Js) -&gt; ()</code>.</p>
 <p>Since callbacks are meant to only be called once, this is a perfectly fine bound
 for us to use here.</p>
-<p>Now, traits doesn't have a size so for the compiler to be able to allocate space
+<p>Now, traits don't have a size so for the compiler to be able to allocate space
 for it on the stack we either need to take a reference <code>&amp;FnOnce(Js)</code> or place it
 on the heap using <code>Box</code>. We do the latter since that's the only thing that makes
-sense for our use case. Box is a pointer to a heap allocated variable which we do
+sense for our use case. <code>Box</code> is a pointer to a heap allocated variable which we do
 know the size of so we store that reference in our <code>callback_queue</code> HashMap.</p>
 <blockquote>
 <p>What makes a closure?
@@ -2573,8 +2573,7 @@ is how we register <code>I/O</code> work. This is how we register an <code>epoll
 }
 </code></pre>
 <p>The first thing we do is to add the callback to our <code>callback_queue</code>, calling the
-method we explained previously. Next we do a print statement, just since we want
-to print out the flow of our program we need to add this at strategic places.</p>
+method we explained previously.</p>
 <blockquote>
 <p>One important thing to note here. Our <code>token</code> in this case is already guaranteed
 to be unique. We generate it in the <code>Http</code> module (which is the only one registering
@@ -2624,7 +2623,7 @@ result of the work we do in our thread is the input to our callback. This closur
 need to be <code>Send</code> since we don't pass the callback itself to the thread pool.</p>
 <p>Next we generate a new identity with <code>self.generate_cb_identity()</code> and we add the
 callback to our callback queue.</p>
-<p>Then we construct a new <code>Event</code>, and as I have shown earlier, we need to <code>Box</code> the
+<p>We then construct a new <code>Event</code>, and as I have shown earlier, we need to <code>Box</code> the
 closure.</p>
 <p>Now, the last part could be made arbitrarily complex. This is where you decide how
 you want to schedule your work to the thread pool. In our case we just get an
@@ -2646,7 +2645,7 @@ push them directly to a thread in the order they come.</p>
         print(format!(&quot;Registered timer event id: {}&quot;, cb_id));
     }
 </code></pre>
-<p>Set timeout uses <code>std::time::Instant</code> to get a representation of &quot;now&quot;. It's the first
+<p><code>set_timeout</code> uses <code>std::time::Instant</code> to get a representation of &quot;now&quot;. It's the first
 thing we do since the user expects the timeout to be calculated from &quot;now&quot;, and some
 of our operations here might take a little time.</p>
 <p>We generate an identity for the callback <code>cb</code> passed in to <code>set_timeout</code> and add
@@ -2687,7 +2686,7 @@ runtime into our <code>javascript</code> function (which we could do if we wante
 better Rust) we need to dereference a mutable pointer to our runtime.</p>
 <p>Now, we know this is safe for two reasons.</p>
 <ol>
-<li><code>RUNTIME</code> is always access from one thread</li>
+<li><code>RUNTIME</code> is always accessed from one thread</li>
 <li>We know that all calls to our <code>modules</code> will be in <code>Runtime.run(...)</code> at which point we know that <code>RUNTIME</code> will be a valid pointer</li>
 </ol>
 <p>Now it's not pretty, and that's also why I explain why we do it, and why it's safe here. Normally, all <code>unsafe</code>
@@ -2730,7 +2729,7 @@ its a huge file that takes a second to read.</p>
 <blockquote>
 <p>You might remember from the <a href="./8_9_infrastructure.html">Infrastructure chapter</a> that
 our <code>register_work</code> method received a task argument <code>task: impl Fn() -&gt; Js + Send + 'static</code>.
-As you see here, our closure returns a <code>Js</code>object and takes no arguments, which means
+As you see here, our <code>work</code> closure returns a <code>Js</code> object and takes no arguments, which means
 it conforms to this signature. The <code>Fn</code> trait will be automatically derived.
 <code>Send</code> is also an automatically derived trait, which means that we can't implement
 <code>Send</code>. However if we tried to send types that are <code>!Send</code> to our thread by
@@ -2739,7 +2738,7 @@ referencing them in our closure we would get an error.</p>
 <p>The last part is that we dereference our runtime and call <code>rt.register_work(work, ThreadPoolTaskKind::FileRead, cb)</code>
 to register the task with our <code>threadpool</code>.</p>
 <h2 id="bonus-material"><a class="header" href="#bonus-material">Bonus material</a></h2>
-<p>You might be wondering why we (and <code>libuv</code> and Rusts own <code>tokio</code>) do file operations
+<p>You might be wondering why we (and <code>libuv</code> and Rust's own <code>tokio</code>) do file operations
 in the <code>threadpool</code> and not in our <code>epoll-event-queue</code>? It's I/O  isn't it?</p>
 <p>There are actually several reasons for this:</p>
 <p>First and foremost. The OS will cache a lot of files that are frequently accessed,
@@ -2756,9 +2755,9 @@ if it's a large file it will still take some time to read it from the OS cache t
 your process memory (your buffer) and that will block our entire event loop.</p>
 <p>Better do that in the thread pool.</p>
 <p>Secondly, the support for async file operations is limited and to a varying degree
-well implemented. The only system that does this pretty good is Windows since it
-uses a <code>completion</code> based model (which means it can let you know when the data is
-read into your buffer).</p>
+well implemented. The only system that does this well is Windows since it
+uses a completion based model: this means it can let you know when the data is
+read into your buffer.</p>
 <blockquote>
 <p>With the introduction of <a href="https://kernel.dk/io_uring.pdf">io_uring</a> Linux has arguably made
 significant improvements in this regard, and now supports a <em>completion</em> based model as well. At the
@@ -2767,8 +2766,8 @@ might expect to see changes in the way we handle cross platform event loops in t
 fact that there is now two major systems supporting high performance completion based models.</p>
 </blockquote>
 <p>It makes sense for a completion based model to try to do this asynchronously, but
-since the real effect are so small and the code complexity is high (especially when you're
-writing a server that is cross platform) most implementations find that using a thread pool
+since the real effects are so small and code complexity so high (especially when you're
+writing a server that is cross platform), most implementations find using a thread pool
 gives good enough performance.</p>
 <p>To sum it all up:</p>
 <p><strong>Threadpool:</strong></p>
@@ -2820,7 +2819,7 @@ module also sends work to the <code>threadpool</code>.</p>
 run here, but it will get called in one of our worker threads).</p>
 <p>Once that is finished we return the result as <code>Js::Int(fib)</code>.</p>
 <p>Lastly we dereference our <code>RUNTIME</code> and we call <code>rt.register_work(work, ThreadPoolTaskKind::Encrypt, cb)</code> to register our task with the <code>threadpool</code>.</p>
-<p>Let's move on, we're very soon at the finish line.</p>
+<p>Let's move on, we're almost at the finish line.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="http-module"><a class="header" href="#http-module">Http module</a></h1>
 <p>The <code>Http</code> module is probably the one I personally find interesting. There is
 two reasons for this:</p>
@@ -2902,7 +2901,7 @@ not result in a valid <code>GET</code> request.</p>
 <p>We construct the request by passing in the delay we want and the address we
 want to be redirected to.</p>
 <p>Next we write this request to our <code>TcpStream</code>. In a real implementation this would
-have been done by issuing the write in an async manner and then register an event
+have been done by issuing the write in an async manner and then registering an event
 when the write has happened.</p>
 <pre><code class="language-rust  ignore">stream
     .write_all(request.as_bytes())
@@ -2936,7 +2935,7 @@ make sure of that.</p>
 <p>However, this has a drawback. We don't really need it to be <code>&amp;mut</code> on <code>linux</code> and <code>macos</code>
 so on these systems we might get a compiler warning letting us know it doesn't need
 to be <code>&amp;mut</code>. There are ways around this though, but in the interest of actually finishing
-both books I had to stop somewhere and this is not the worlds end.</p>
+both books I had to stop somewhere and this is not the world's end.</p>
 </blockquote>
 <p>The main point here is that we register an interest to read in a non-blocking manner.</p>
 <p>I'll repeat this part of the code so you have it right in front of you while i
@@ -2962,13 +2961,13 @@ because it might be that at some point this will block if not all the data we ne
 is present at once.</p>
 <p>The right thing to do then would be to read parts of the
 data into a buffer while calling <code>stream.read(..)</code> in a loop, and at some point
-this might return an <code>Err::WouldBlock</code> at which we re-wrap our callback and re-register
+this might return an <code>Err::WouldBlock</code> at which point we re-wrap our callback and re-register
 our read event to read the rest.</p>
 <blockquote>
 <p>Another reason this might block is that threads might get what is called a &quot;spurious&quot; wakeup.</p>
 <p>What is that? Well, the OS might wake up the thread, without there being any data there. The
 reason for this is kind of hard to get confirmed, but as far as I understand, this can happen if
-the OS is in doubt if an event occurred or not. It does apparently happen that some interrupts
+the OS is in doubt whether an event occurred or not. It does apparently happen that some interrupts
 might get issued without the OS getting notified. This can be caused by unfortunate timing since
 there are some bits of code that needs to be executed &quot;uninterrupted&quot; and there is a way for the
 OS to instruct the CPU to filter some interrupts for short periods. The OS can't be &quot;optimistic&quot; in the
@@ -3082,9 +3081,9 @@ again to define what we'll do in the case if it's <code>Some</code>.</p>
 <p>This means that <strong>if</strong> the first line of <code>content[loc..]</code> is something we pass that
 into our closure <code>map(|l| format!(&quot;{}\n&quot;,l))</code>, which results in <code>l</code> as this line.</p>
 <p>We simply map this line into a <code>String</code> which we have appended a line break to.</p>
-<p>Lastly we <code>unwrap</code> the result of these operations. If you kept your thoungue right
-all the way through this should either be Some(the_first_line_starting_with_Location),
-or None. If it's None we just pass inn an empty <code>String</code>.</p>
+<p>Lastly we <code>unwrap</code> the result of these operations. If you kept your tongue right
+all the way through this should either be <code>Some(the_first_line_starting_with_Location)</code>,
+or <code>None</code>. If it's <code>None</code> we just pass in an empty <code>String</code>.</p>
 <p>Lastly we output everything.</p>
 <h2 id="congratulations"><a class="header" href="#congratulations">Congratulations</a></h2>
 <p><strong>You made it! Well done my friend! Now, there are a few small chapters left but we're actually done going through all async basics and implementing our runtime. So relax, and give yourself a pat on the back. All the hard work is finished!</strong></p>
@@ -3266,7 +3265,7 @@ pub struct Runtime {
     epoll_timeout: Arc&lt;Mutex&lt;Option&lt;i32&gt;&gt;&gt;,
     /// Channel used by both our threadpool and our epoll thread to send events
     /// to the main loop
-    event_reciever: Receiver&lt;PollEvent&gt;,
+    event_receiver: Receiver&lt;PollEvent&gt;,
     /// Creates an unique identity for our callbacks
     identity_token: usize,
     /// The number of events pending. When this is zero, we're done
@@ -3295,18 +3294,18 @@ enum PollEvent {
 impl Runtime {
     pub fn new() -&gt; Self {
         // ===== THE REGULAR THREADPOOL =====
-        let (event_sender, event_reciever) = channel::&lt;PollEvent&gt;();
+        let (event_sender, event_receiver) = channel::&lt;PollEvent&gt;();
         let mut threads = Vec::with_capacity(4);
 
         for i in 0..4 {
-            let (evt_sender, evt_reciever) = channel::&lt;Task&gt;();
+            let (evt_sender, evt_receiver) = channel::&lt;Task&gt;();
             let event_sender = event_sender.clone();
 
             let handle = thread::Builder::new()
                 .name(format!(&quot;pool{}&quot;, i))
                 .spawn(move || {
 
-                    while let Ok(task) = evt_reciever.recv() {
+                    while let Ok(task) = evt_receiver.recv() {
                         print(format!(&quot;received a task of type: {}&quot;, task.kind));
 
                         if let ThreadPoolTaskKind::Close = task.kind {
@@ -3379,7 +3378,7 @@ impl Runtime {
             epoll_registrator: registrator,
             epoll_thread,
             epoll_timeout,
-            event_reciever,
+            event_receiver,
             identity_token: 0,
             pending_events: 0,
             thread_pool: threads,
@@ -3444,7 +3443,7 @@ impl Runtime {
             // We handle one and one event but multiple events could be returned
             // on the same poll. We won't cover that here though but there are
             // several ways of handling this.
-            if let Ok(event) = self.event_reciever.recv() {
+            if let Ok(event) = self.event_receiver.recv() {
                 match event {
                     PollEvent::Timeout =&gt; (),
                     PollEvent::Threadpool((thread_id, callback_id, data)) =&gt; {

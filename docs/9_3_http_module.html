@@ -218,7 +218,7 @@ not result in a valid <code>GET</code> request.</p>
 <p>We construct the request by passing in the delay we want and the address we
 want to be redirected to.</p>
 <p>Next we write this request to our <code>TcpStream</code>. In a real implementation this would
-have been done by issuing the write in an async manner and then register an event
+have been done by issuing the write in an async manner and then registering an event
 when the write has happened.</p>
 <pre><code class="language-rust  ignore">stream
     .write_all(request.as_bytes())
@@ -252,7 +252,7 @@ make sure of that.</p>
 <p>However, this has a drawback. We don't really need it to be <code>&amp;mut</code> on <code>linux</code> and <code>macos</code>
 so on these systems we might get a compiler warning letting us know it doesn't need
 to be <code>&amp;mut</code>. There are ways around this though, but in the interest of actually finishing
-both books I had to stop somewhere and this is not the worlds end.</p>
+both books I had to stop somewhere and this is not the world's end.</p>
 </blockquote>
 <p>The main point here is that we register an interest to read in a non-blocking manner.</p>
 <p>I'll repeat this part of the code so you have it right in front of you while i
@@ -278,13 +278,13 @@ because it might be that at some point this will block if not all the data we ne
 is present at once.</p>
 <p>The right thing to do then would be to read parts of the
 data into a buffer while calling <code>stream.read(..)</code> in a loop, and at some point
-this might return an <code>Err::WouldBlock</code> at which we re-wrap our callback and re-register
+this might return an <code>Err::WouldBlock</code> at which point we re-wrap our callback and re-register
 our read event to read the rest.</p>
 <blockquote>
 <p>Another reason this might block is that threads might get what is called a &quot;spurious&quot; wakeup.</p>
 <p>What is that? Well, the OS might wake up the thread, without there being any data there. The
 reason for this is kind of hard to get confirmed, but as far as I understand, this can happen if
-the OS is in doubt if an event occurred or not. It does apparently happen that some interrupts
+the OS is in doubt whether an event occurred or not. It does apparently happen that some interrupts
 might get issued without the OS getting notified. This can be caused by unfortunate timing since
 there are some bits of code that needs to be executed &quot;uninterrupted&quot; and there is a way for the
 OS to instruct the CPU to filter some interrupts for short periods. The OS can't be &quot;optimistic&quot; in the

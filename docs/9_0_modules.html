@@ -155,7 +155,7 @@ runtime into our <code>javascript</code> function (which we could do if we wante
 better Rust) we need to dereference a mutable pointer to our runtime.</p>
 <p>Now, we know this is safe for two reasons.</p>
 <ol>
-<li><code>RUNTIME</code> is always access from one thread</li>
+<li><code>RUNTIME</code> is always accessed from one thread</li>
 <li>We know that all calls to our <code>modules</code> will be in <code>Runtime.run(...)</code> at which point we know that <code>RUNTIME</code> will be a valid pointer</li>
 </ol>
 <p>Now it's not pretty, and that's also why I explain why we do it, and why it's safe here. Normally, all <code>unsafe</code>

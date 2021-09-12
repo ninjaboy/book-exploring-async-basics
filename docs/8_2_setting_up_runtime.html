@@ -204,7 +204,7 @@ let event_sender = event_sender.clone();
 <p>As you see here, we also clone the <code>Sender</code> part which we'll pass on to each thread
 so they can send messages to our <code>main</code> thread.</p>
 <p>After that's done we build our thread. We'll use <code>thread::Builder::new()</code> instead
-of use <code>thread::spawn</code> since we want to give each thread a name. We'll only use this
+of using <code>thread::spawn</code> since we want to give each thread a name. We'll only use this
 name when we <code>print</code> from our event since it will be clear from which thread
 we printed the message.</p>
 <pre><code class="language-rust  ignore">let handle = thread::Builder::new()
@@ -325,7 +325,7 @@ queue and that's it.</p>
 <blockquote>
 <p>How can <code>Registrator</code> know that the <code>epoll</code> thread hasn't stopped?</p>
 <p>We'll cover this in detail in the next book, but both <code>Poll</code> and <code>Registrator</code>
-holds a reference to an <code>AtomicBool</code> which only job is to indicate if the queue
+holds a reference to an <code>AtomicBool</code> whose only job is to indicate if the queue
 is &quot;alive&quot; or not. In the <code>Drop</code> implemenation of <code>Poll</code> we set this flag to
 false in which case a call to register an event will return an <code>Err</code>.</p>
 </blockquote>
@@ -339,8 +339,9 @@ pool, but we name the thread <code>epoll</code>.</p>
 <pre><code class="language-rust  ignore">let epoll_thread = thread::Builder::new()
     .name(&quot;epoll&quot;.to_string())
     .spawn(move || {
+        let mut events = minimio::Events::with_capacity(1024);
 </code></pre>
-<p>Now we're inside the <code>epoll</code> thread and will define what this thread needs to
+<p>Now that we're inside the <code>epoll</code> thread, we will define what this thread should
 do to poll and handle events.</p>
 <p>First we allocate a buffer to hold event objects that we get from our <code>poll</code> instance.
 These objects contain information about the event that's occurred including a
@@ -348,9 +349,8 @@ These objects contain information about the event that's occurred including a
 has occurred. In our case the token is a simple <code>usize</code>.</p>
 <pre><code class="language-rust  ignore">let mut events = minimio::Events::with_capacity(1024);
 </code></pre>
-<p>We allocate the buffer here since we only allocate this once when we do it here,
-and we want to avoid allocating a new buffer on every turn of our <code>loop</code>.</p>
-<p>Basically, our <code>epoll</code> thread will run a loop which consciously polls for new
+<p>We allocate the buffer here to avoid allocating a new buffer on every turn of our <code>loop</code>.</p>
+<p>Basically, our <code>epoll</code> thread will run a loop which continuously polls for new
 events.</p>
 <pre><code class="language-rust  ignore">loop {
 </code></pre>

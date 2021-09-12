@@ -233,9 +233,9 @@ again to define what we'll do in the case if it's <code>Some</code>.</p>
 <p>This means that <strong>if</strong> the first line of <code>content[loc..]</code> is something we pass that
 into our closure <code>map(|l| format!(&quot;{}\n&quot;,l))</code>, which results in <code>l</code> as this line.</p>
 <p>We simply map this line into a <code>String</code> which we have appended a line break to.</p>
-<p>Lastly we <code>unwrap</code> the result of these operations. If you kept your thoungue right
-all the way through this should either be Some(the_first_line_starting_with_Location),
-or None. If it's None we just pass inn an empty <code>String</code>.</p>
+<p>Lastly we <code>unwrap</code> the result of these operations. If you kept your tongue right
+all the way through this should either be <code>Some(the_first_line_starting_with_Location)</code>,
+or <code>None</code>. If it's <code>None</code> we just pass in an empty <code>String</code>.</p>
 <p>Lastly we output everything.</p>
 <h2 id="congratulations"><a class="header" href="#congratulations">Congratulations</a></h2>
 <p><strong>You made it! Well done my friend! Now, there are a few small chapters left but we're actually done going through all async basics and implementing our runtime. So relax, and give yourself a pat on the back. All the hard work is finished!</strong></p>

@@ -190,8 +190,8 @@ it's only one thread that will be generating Id's. This could cause problems if
 several threads tried to <code>read</code> and <code>generate</code> new Id's at the same time.</p>
 </blockquote>
 <p>We use the <code>wrapping_add</code> method on <code>usize</code> to get the next Id, this means that
-when we reach <code>18446744073709551615</code> we wrap around to 0 again.</p>
-<p>We do check of our callback_queue contains our key (even though that is unlikely
+when we reach <code>18446744073709551615</code> we wrap around to <code>0</code> again.</p>
+<p>We do a check if our <code>callback_queue</code> contains our key (even though that is unlikely
 by design), and if it's taken we just generate a new one until we find a available
 one.</p>
 <p>Next up is the method we use to add a callback to our <code>callback_queue</code>:</p>
@@ -215,10 +215,10 @@ up as a result of Rusts <code>RAII</code> pattern. It's implicit that <code>FnOn
 case so we don't have to write <code>FnOnce(Js) -&gt; ()</code>.</p>
 <p>Since callbacks are meant to only be called once, this is a perfectly fine bound
 for us to use here.</p>
-<p>Now, traits doesn't have a size so for the compiler to be able to allocate space
+<p>Now, traits don't have a size so for the compiler to be able to allocate space
 for it on the stack we either need to take a reference <code>&amp;FnOnce(Js)</code> or place it
 on the heap using <code>Box</code>. We do the latter since that's the only thing that makes
-sense for our use case. Box is a pointer to a heap allocated variable which we do
+sense for our use case. <code>Box</code> is a pointer to a heap allocated variable which we do
 know the size of so we store that reference in our <code>callback_queue</code> HashMap.</p>
 <blockquote>
 <p>What makes a closure?
@@ -241,8 +241,7 @@ is how we register <code>I/O</code> work. This is how we register an <code>epoll
 }
 </code></pre>
 <p>The first thing we do is to add the callback to our <code>callback_queue</code>, calling the
-method we explained previously. Next we do a print statement, just since we want
-to print out the flow of our program we need to add this at strategic places.</p>
+method we explained previously.</p>
 <blockquote>
 <p>One important thing to note here. Our <code>token</code> in this case is already guaranteed
 to be unique. We generate it in the <code>Http</code> module (which is the only one registering
@@ -292,7 +291,7 @@ result of the work we do in our thread is the input to our callback. This closur
 need to be <code>Send</code> since we don't pass the callback itself to the thread pool.</p>
 <p>Next we generate a new identity with <code>self.generate_cb_identity()</code> and we add the
 callback to our callback queue.</p>
-<p>Then we construct a new <code>Event</code>, and as I have shown earlier, we need to <code>Box</code> the
+<p>We then construct a new <code>Event</code>, and as I have shown earlier, we need to <code>Box</code> the
 closure.</p>
 <p>Now, the last part could be made arbitrarily complex. This is where you decide how
 you want to schedule your work to the thread pool. In our case we just get an
@@ -314,7 +313,7 @@ push them directly to a thread in the order they come.</p>
         print(format!(&quot;Registered timer event id: {}&quot;, cb_id));
     }
 </code></pre>
-<p>Set timeout uses <code>std::time::Instant</code> to get a representation of &quot;now&quot;. It's the first
+<p><code>set_timeout</code> uses <code>std::time::Instant</code> to get a representation of &quot;now&quot;. It's the first
 thing we do since the user expects the timeout to be calculated from &quot;now&quot;, and some
 of our operations here might take a little time.</p>
 <p>We generate an identity for the callback <code>cb</code> passed in to <code>set_timeout</code> and add

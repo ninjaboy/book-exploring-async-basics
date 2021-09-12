@@ -172,7 +172,7 @@ its a huge file that takes a second to read.</p>
 <blockquote>
 <p>You might remember from the <a href="./8_9_infrastructure.html">Infrastructure chapter</a> that
 our <code>register_work</code> method received a task argument <code>task: impl Fn() -&gt; Js + Send + 'static</code>.
-As you see here, our closure returns a <code>Js</code>object and takes no arguments, which means
+As you see here, our <code>work</code> closure returns a <code>Js</code> object and takes no arguments, which means
 it conforms to this signature. The <code>Fn</code> trait will be automatically derived.
 <code>Send</code> is also an automatically derived trait, which means that we can't implement
 <code>Send</code>. However if we tried to send types that are <code>!Send</code> to our thread by
@@ -181,7 +181,7 @@ referencing them in our closure we would get an error.</p>
 <p>The last part is that we dereference our runtime and call <code>rt.register_work(work, ThreadPoolTaskKind::FileRead, cb)</code>
 to register the task with our <code>threadpool</code>.</p>
 <h2 id="bonus-material"><a class="header" href="#bonus-material">Bonus material</a></h2>
-<p>You might be wondering why we (and <code>libuv</code> and Rusts own <code>tokio</code>) do file operations
+<p>You might be wondering why we (and <code>libuv</code> and Rust's own <code>tokio</code>) do file operations
 in the <code>threadpool</code> and not in our <code>epoll-event-queue</code>? It's I/O  isn't it?</p>
 <p>There are actually several reasons for this:</p>
 <p>First and foremost. The OS will cache a lot of files that are frequently accessed,
@@ -198,9 +198,9 @@ if it's a large file it will still take some time to read it from the OS cache t
 your process memory (your buffer) and that will block our entire event loop.</p>
 <p>Better do that in the thread pool.</p>
 <p>Secondly, the support for async file operations is limited and to a varying degree
-well implemented. The only system that does this pretty good is Windows since it
-uses a <code>completion</code> based model (which means it can let you know when the data is
-read into your buffer).</p>
+well implemented. The only system that does this well is Windows since it
+uses a completion based model: this means it can let you know when the data is
+read into your buffer.</p>
 <blockquote>
 <p>With the introduction of <a href="https://kernel.dk/io_uring.pdf">io_uring</a> Linux has arguably made
 significant improvements in this regard, and now supports a <em>completion</em> based model as well. At the
@@ -209,8 +209,8 @@ might expect to see changes in the way we handle cross platform event loops in t
 fact that there is now two major systems supporting high performance completion based models.</p>
 </blockquote>
 <p>It makes sense for a completion based model to try to do this asynchronously, but
-since the real effect are so small and the code complexity is high (especially when you're
-writing a server that is cross platform) most implementations find that using a thread pool
+since the real effects are so small and code complexity so high (especially when you're
+writing a server that is cross platform), most implementations find using a thread pool
 gives good enough performance.</p>
 <p>To sum it all up:</p>
 <p><strong>Threadpool:</strong></p>

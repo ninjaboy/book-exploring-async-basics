@@ -41,7 +41,7 @@ We read the file into a buffer and then return `Js::String(buffer)`.
 
 > You might remember from the [Infrastructure chapter](./8_9_infrastructure.md) that
 > our `register_work` method received a task argument `task: impl Fn() -> Js + Send + 'static`.
-> As you see here, our closure returns a `Js`object and takes no arguments, which means
+> As you see here, our `work` closure returns a `Js` object and takes no arguments, which means
 > it conforms to this signature. The `Fn` trait will be automatically derived.
 > `Send` is also an automatically derived trait, which means that we can't implement
 > `Send`. However if we tried to send types that are `!Send` to our thread by
@@ -52,7 +52,7 @@ to register the task with our `threadpool`.
 
 ## Bonus material
 
-You might be wondering why we (and `libuv` and Rusts own `tokio`) do file operations
+You might be wondering why we (and `libuv` and Rust's own `tokio`) do file operations
 in the `threadpool` and not in our `epoll-event-queue`? It's I/O  isn't it?
 
 There are actually several reasons for this:
@@ -75,9 +75,9 @@ your process memory (your buffer) and that will block our entire event loop.
 Better do that in the thread pool.
 
 Secondly, the support for async file operations is limited and to a varying degree
-well implemented. The only system that does this pretty good is Windows since it
-uses a `completion` based model (which means it can let you know when the data is
-read into your buffer).
+well implemented. The only system that does this well is Windows since it
+uses a completion based model: this means it can let you know when the data is
+read into your buffer.
 
 > With the introduction of [io_uring](https://kernel.dk/io_uring.pdf) Linux has arguably made
 significant improvements in this regard, and now supports a _completion_ based model as well. At the
@@ -86,8 +86,8 @@ might expect to see changes in the way we handle cross platform event loops in t
 fact that there is now two major systems supporting high performance completion based models.
 
 It makes sense for a completion based model to try to do this asynchronously, but
-since the real effect are so small and the code complexity is high (especially when you're
-writing a server that is cross platform) most implementations find that using a thread pool
+since the real effects are so small and code complexity so high (especially when you're
+writing a server that is cross platform), most implementations find using a thread pool
 gives good enough performance.
 
 To sum it all up:

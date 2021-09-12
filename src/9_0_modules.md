@@ -23,7 +23,7 @@ better Rust) we need to dereference a mutable pointer to our runtime.
 
 Now, we know this is safe for two reasons.
 
-1. `RUNTIME` is always access from one thread
+1. `RUNTIME` is always accessed from one thread
 2. We know that all calls to our `modules` will be in `Runtime.run(...)` at which point we know that `RUNTIME` will be a valid pointer
 
 Now it's not pretty, and that's also why I explain why we do it, and why it's safe here. Normally, all `unsafe`

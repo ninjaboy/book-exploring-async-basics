@@ -26,7 +26,7 @@ let mut ticks = 0; // just for us printing out
 f();
 ```
 
-The first two lines is just a `hack` we use in our code to make it "look" more
+The first two lines is just a hack we use in our code to make it "look" more
 like javascript. We take the pointer to `self` and set it in the global
 variable `RUNTIME`.
 
@@ -37,7 +37,7 @@ To be honest, we only set this once, and it's set at the start of of our event l
 
 `ticks` is only a counter for us to keep track of how many times we've looped which for display.
 
-The last and least visible part of this code is actually where we kick everything off, calling `f()`. `f` will be the code we wrote in the `javascript` function in the last chapter. If this is empty nothing will happen.
+The last and least visible part of this code is actually where we kick everything off, calling `f()`. `f` will be the code we wrote in the `javascript` function in the last chapter, if this is empty nothing will happen.
 
 ## Starting the event loop
 
@@ -49,7 +49,7 @@ while self.pending_events > 0 {
 
 `self.pending_events` keeps track of how many pending events we have, so that when no events are left we exit the loop since our event loop is finished.
 
-So where does these events come from? In our `javascript` function `f` which we introduced in the chapter [Introducing our main example](./7_0_introducing_our_main_example.md) you probably noticed that we called functions like
+So where do these events come from? In our `javascript` function `f` which we introduced in the chapter [Introducing our main example](./7_0_introducing_our_main_example.md) you probably noticed that we called functions like
 `set_timeout` and `Fs::read`. These functions are defined in the Node runtime
 (as they are in ours), and their main responsibility is to create tasks and register interest on events. When one of these tasks or interests are registered this counter is increased.
 
@@ -105,7 +105,7 @@ If we're still holding the lock we'll end up in a `deadlock`. `drop(epoll_timeou
 ### Wait for events
 
 ```rust, ignore
-if let Ok(event) = self.event_reciever.recv() {
+if let Ok(event) = self.event_receiver.recv() {
     match event {
         PollEvent::Timeout => (),
         PollEvent::Threadpool((thread_id, callback_id, data)) => {
@@ -119,7 +119,7 @@ if let Ok(event) = self.event_reciever.recv() {
 self.run_callbacks();
 ```
 
-Both our `threadpool` threads and our `epoll` thread holds a `sending` part of the channel `self.event_reciever`. If either a thread in the `threadpool` finishes a task, or if the `epoll` thread receives notification that an event is ready a `PollEvent` is sent through the channel and received here.
+Both our `threadpool` threads and our `epoll` thread holds a `sending` part of the channel `self.event_receiver`. If either a thread in the `threadpool` finishes a task, or if the `epoll` thread receives notification that an event is ready a `PollEvent` is sent through the channel and received here.
 
 This will block our main thread until something happens, **or** a timeout occurs.
 
@@ -136,7 +136,7 @@ We'll explain these methods in the following chapters.
 
  ```rust, ignore
 // ===== CHECK =====
-// an set immediate function could be added pretty easily but we won't that here
+// a set immediate function could be added pretty easily but we won't that here
 ```
 
 Node implements a check "hook" to the event loop next. Calls to `setImmediate`
@@ -194,7 +194,7 @@ pub fn run(mut self, f: impl Fn()) {
         // NOT PART OF LOOP, JUST FOR US TO SEE WHAT TICK IS EXECUTING
         print(format!("===== TICK {} =====", ticks));
 
-        // ===== 2. TIMERS =====
+        // ===== 1. TIMERS =====
         self.process_expired_timers();
 
         // ===== 2. CALLBACKS =====
@@ -225,7 +225,7 @@ pub fn run(mut self, f: impl Fn()) {
         // We handle one and one event but multiple events could be returned
         // on the same poll. We won't cover that here though but there are
         // several ways of handling this.
-        if let Ok(event) = self.event_reciever.recv() {
+        if let Ok(event) = self.event_receiver.recv() {
             match event {
                 PollEvent::Timeout => (),
                 PollEvent::Threadpool((thread_id, callback_id, data)) => {

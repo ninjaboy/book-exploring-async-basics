@@ -96,7 +96,7 @@ We construct the request by passing in the delay we want and the address we
 want to be redirected to.
 
 Next we write this request to our `TcpStream`. In a real implementation this would
-have been done by issuing the write in an async manner and then register an event
+have been done by issuing the write in an async manner and then registering an event
 when the write has happened.
 
 ```rust, ignore
@@ -140,7 +140,7 @@ make sure of that.
 > However, this has a drawback. We don't really need it to be `&mut` on `linux` and `macos`
 > so on these systems we might get a compiler warning letting us know it doesn't need
 > to be `&mut`. There are ways around this though, but in the interest of actually finishing
-> both books I had to stop somewhere and this is not the worlds end.
+> both books I had to stop somewhere and this is not the world's end.
 
 The main point here is that we register an interest to read in a non-blocking manner.
 
@@ -176,7 +176,7 @@ is present at once.
 
 The right thing to do then would be to read parts of the
 data into a buffer while calling `stream.read(..)` in a loop, and at some point
-this might return an `Err::WouldBlock` at which we re-wrap our callback and re-register
+this might return an `Err::WouldBlock` at which point we re-wrap our callback and re-register
 our read event to read the rest.
 
 
@@ -184,7 +184,7 @@ our read event to read the rest.
 >
 > What is that? Well, the OS might wake up the thread, without there being any data there. The
 > reason for this is kind of hard to get confirmed, but as far as I understand, this can happen if
-> the OS is in doubt if an event occurred or not. It does apparently happen that some interrupts
+> the OS is in doubt whether an event occurred or not. It does apparently happen that some interrupts
 > might get issued without the OS getting notified. This can be caused by unfortunate timing since
 > there are some bits of code that needs to be executed "uninterrupted" and there is a way for the
 > OS to instruct the CPU to filter some interrupts for short periods. The OS can't be "optimistic" in the

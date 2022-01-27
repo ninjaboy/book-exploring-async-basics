@@ -5,7 +5,9 @@ If you had asked me this question when I first thought I understood how programs
 **What started to make me think I was very wrong was some code looking like this:**
 
 ```rust
-#![feature(llvm_asm)]
+# // #![feature(force_mdbook_nightly_playground)]
+use std::arch::asm;
+
 fn main() {
     let t = 100;
     let t_ptr: *const usize = &t;
@@ -15,10 +17,8 @@ fn main() {
 }
 
 fn dereference(ptr: *const usize) -> usize {
-    let res: usize;
-    unsafe {
-        llvm_asm!("mov ($1), $0":"=r"(res): "r"(ptr))
-        };
+    let mut res: usize;
+    unsafe { asm!("mov {0}, [{1}]", out(reg) res, in(reg) ptr) };
     res
 }
 ```
@@ -30,7 +30,9 @@ As you see, this code will output `100` as expected. But let's now instead creat
 happens when we pass that into the same function:
 
 ```rust
-#![feature(llvm_asm)]
+# // #![feature(force_mdbook_nightly_playground)]
+
+use std::arch::asm;
 fn main() {
     let t = 99999999999999 as *const usize;
     let x = dereference(t);
@@ -38,11 +40,8 @@ fn main() {
     println!("{}", x);
 }
 # fn dereference(ptr: *const usize) -> usize {
-#     let res: usize;
-#     unsafe {
-#     llvm_asm!("mov ($1), $0":"=r"(res): "r"(ptr));
-#     }
-#
+#     let mut res: usize;
+#     unsafe { asm!("mov {0}, [{1}]", out(reg) res, in(reg) ptr) };
 #     res
 # }
 ```

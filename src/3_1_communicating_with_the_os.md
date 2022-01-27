@@ -39,8 +39,10 @@ On Linux and macOS the `syscall` we want to invoke is called `write`. Both syste
 **On Linux a `write` syscall can look like this** \
 (You can run the example by clicking "play" in the right corner)
 
-```rust
-#![feature(llvm_asm)]
+```rust, edition2021
+# // #![feature(force_mdbook_nightly_playground)]
+use std::arch::asm;
+
 fn main() {
     let message = String::from("Hello world from interrupt!\n");
     syscall(message);
@@ -53,28 +55,28 @@ fn syscall(message: String) {
     let len = message.len();
 
     unsafe {
-        llvm_asm!("
-        mov     $$1, %rax   # system call 1 is write on Linux
-        mov     $$1, %rdi   # file handle 1 is stdout
-        mov     $0, %rsi    # address of string to output
-        mov     $1, %rdx    # number of bytes
-        syscall             # call kernel, syscall interrupt
-    "
-        :
-        : "r"(msg_ptr), "r"(len)
-        : "rax", "rdi", "rsi", "rdx"
-        )
+        asm!(
+            "mov rax, 1",      // system call 0x2000004 is write on macos
+            "mov rdi, 1",      // file handle 1 is stdout
+            "syscall",         // call kernel, syscall interrupt
+            in("rsi") msg_ptr, // address of string to output
+            in("rdx") len,     // number of bytes
+            out("rax") _, out("rdi") _, lateout("rsi") _, lateout("rdx") _
+        );
     }
 }
 ```
 
-The code to initiate the `write` syscall on Linux is `1` so when we write `$$1` we're writing the literal value 1 to the `rax` register.
-
-> `$$` in inline assembly using the AT&T syntax is how you write a literal value. A single `$` means you're referring to a parameter so when we write `$0` we're referring to the first parameter called `msg_ptr`. We also need to clobber the registers we write to so that we let the compiler know that we're modifying them and it can't rely on storing any values in these.
+The code to initiate the `write` syscall on Linux is `1` so when we write `1` we're writing the literal value 1 to the `rax` register.
 
 Coincidentally, placing the value `1` into the `rdi` register means that we're referring to `stdout` which is the file descriptor we want to write to. This has nothing to do with the fact that the `write` syscall also has the code `1`.
 
-Secondly, we pass in the address of our string buffer and the length of the buffer in the registers `rsi` and `rdx` respectively, and call the `syscall` instruction.
+Rusts inline assembly syntax takes a little getting used to but when we write `in("rsi") msg_ptr` and `in("rdx") len` we pass in the address of our string buffer and the length of the buffer in the registers `rsi` and `rdx` respectively.
+
+> We also need to clobber the registers we write to so that we let the compiler know that we're modifying them and it can't rely on storing any values in these. We do this by declaring the registers as outputs but with _ instead of a
+> variable name. We use `lateout` for the registers that also serve as inputs since a register marked with `out` can't have an initial value at the start of the assembly block.
+
+Lastly we call the `syscall` instruction.
 
 > The `syscall` instruction is a rather new one. On the earlier 32-bit systems in the `x86` architecture, you invoked a syscall by issuing a software interrupt `int 0x80`. A software interrupt is considered slow at the level we're working at here so later a separate instruction for it called `syscall` was added. The `syscall` instruction uses [VDSO](http://articles.manugarg.com/systemcallinlinux2_6.html), which is a memory page attached to each process' memory, so no context switch is necessary to execute the system call.
 
@@ -82,30 +84,29 @@ Secondly, we pass in the address of our string buffer and the length of the buff
 (since the Rust playground is running Linux, we can't run this example here)
 
 ```rust, ignore
-#![feature(llvm_asm)]
+use std::arch::asm;
+
 fn main() {
     let message = String::from("Hello world from interrupt!\n");
     syscall(message);
 }
 
-#[cfg(target_os = "macos")]
+#[cfg(target_os = "linux")]
+#[inline(never)]
 fn syscall(message: String) {
     let msg_ptr = message.as_ptr();
     let len = message.len();
+
     unsafe {
-        llvm_asm!(
-            "
-        mov     $$0x2000004, %rax   # system call 0x2000004 is write on macos
-        mov     $$1, %rdi           # file handle 1 is stdout
-        mov     $0, %rsi            # address of string to output
-        mov     $1, %rdx            # number of bytes
-        syscall                     # call kernel, syscall interrupt
-    "
-        :
-        : "r"(msg_ptr), "r"(len)
-        : "rax", "rdi", "rsi", "rdx"
-        )
-    };
+        asm!(
+            "mov rax, 0x2000004", // system call 0x2000004 is write on macos
+            "mov rdi, 1",         // file handle 1 is stdout
+            "syscall",            // call kernel, syscall interrupt
+            in("rsi") msg_ptr,    // address of string to output
+            in("rdx") len,         // number of bytes
+            out("rax") _, out("rdi") _, lateout("rsi") _, lateout("rdx") _
+        );
+    }
 }
 ```
 

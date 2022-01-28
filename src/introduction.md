@@ -31,6 +31,8 @@ have yet to confirm this).
 > Linux, macOS and Windows. We'll also only cover the details on how this works
 > on 64 bit systems.
 
+> Note that this book has a companion book called [Exploring Epoll, Kqueue and IOCP with Rust](https://github.com/cfsamson/book-exploring-epoll-kqueue-iocp) where we create the "minimio" library we depend on later in this book.
+
 ## Who is this book for?
 
 I originally started out wanting to explore the fundamentals and inner workings

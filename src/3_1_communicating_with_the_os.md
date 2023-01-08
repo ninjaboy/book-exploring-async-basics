@@ -56,7 +56,7 @@ fn syscall(message: String) {
 
     unsafe {
         asm!(
-            "mov rax, 1",      // system call 0x2000004 is write on macos
+            "mov rax, 1",      // system call 1 is write on linux
             "mov rdi, 1",      // file handle 1 is stdout
             "syscall",         // call kernel, syscall interrupt
             in("rsi") msg_ptr, // address of string to output
@@ -91,7 +91,7 @@ fn main() {
     syscall(message);
 }
 
-#[cfg(target_os = "linux")]
+#[cfg(target_os = "macos")]
 #[inline(never)]
 fn syscall(message: String) {
     let msg_ptr = message.as_ptr();
